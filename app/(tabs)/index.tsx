@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, Text, StyleSheet } from 'react-native';
 import EventCard from 'components/EventCard';
 import { useGetEvents } from '@/useHooks/useEvents';
 import { useEffect } from 'react';
@@ -14,16 +14,23 @@ export default function Tab() {
 
   console.log(events);
   return (
-    <View style={styles.container}>
-      <EventCard />
-    </View>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {events.map((e) => (
+        <EventCard
+          key={e._id}
+          name={e.name}
+          category={e.category}
+          location={e.location}
+          image={e.image}
+          date={e.date}></EventCard>
+      ))}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
+  content: { alignItems: 'center' },
 });
