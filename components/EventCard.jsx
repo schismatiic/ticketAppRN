@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native';
-
+import noPicture from '../assets/noPicture.png';
 const height = Dimensions.get('window').height;
 // no me funciono tailwind muy bien asi que lo hice asi
 const styles = StyleSheet.create({
@@ -8,13 +8,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 12,
     padding: 12,
-    borderRadius: 12,
+    borderRadius: 10,
     color: '#666',
     width: '90%',
     height: height / 4.75,
-    backgroundColor: '#eaeaea',
-    borderBottomColor: 'gray',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    backgroundColor: '#dbdbdb',
+    borderBottomColor: '#cacaca', //haha caca
+    borderBottomWidth: height / 160,
   },
   eventText: {
     paddingLeft: 8,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   eventPicture: {
-    width: '37.5%',
+    width: height / 5.2,
     height: '100%',
     borderRadius: 3,
   },
@@ -40,56 +40,66 @@ const styles = StyleSheet.create({
 export default function EventCard({ name, category, location, date, image }) {
   //formatear titulo
   // cambiamos la imagen a esto si no hay https://placehold.co/600x400?text=No+picture
-  const [picture, setPicture] = useState('');
+  const [picture, setPicture] = useState(null);
   const [title, setTitle] = useState('');
+  const [loc, setLoc] = useState('');
+  const [cat, setCat] = useState(''); //hacemos lo mismo con la ubicacion y la categoria pq john react me dijo
 
   const fechaFormateada = new Date(date).toLocaleDateString('es-CL', {
     year: 'numeric',
-    month: 'long',
+    month: 'numeric',
     day: 'numeric',
   });
 
   useEffect(() => {
     // Formateamos el titulo para que este bonito
     const toTitle = (str) => {
-      return str
-        .toLowerCase()
-        .trim()
-        .split(/\s+/)
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
+      if (str.endsWith('.')) {
+        return str
+          .toLowerCase()
+          .trim()
+          .split(/\s+/)
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      } else {
+        return (
+          str
+            .toLowerCase()
+            .trim()
+            .split(/\s+/)
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ') + '.'
+        );
+      }
     };
     console.log(image);
-    if (image.length < 1 || image === null) {
+    if (image === '') {
       console.log('DEBUG no hay imagen');
-      setPicture('https://placehold.co/600x400?text=No+picture'); //creo que esta api me
+      setPicture(noPicture); //creo que esta api me
     } else {
-      setPicture(image);
+      setPicture({ uri: image });
     }
     setTitle(toTitle(name));
-  }, [name, image]);
+    setLoc(toTitle(location));
+    setCat(toTitle(category));
+  }, [name, image, location, category]);
 
   return (
     <View className="flex-row" style={styles.container}>
-      <Image
-        style={styles.eventPicture}
-        source={{
-          uri: picture,
-        }}
-      />
+      <Image style={styles.eventPicture} source={picture} />
       <View style={styles.eventText}>
         <Text style={styles.eventTitle} numberOfLines={2} ellipsizeMode="tail">
           {title}
         </Text>
         <View className="category">
           <Text numberOfLines={1} ellipsizeMode="tail">
-            {category}
+            {cat}
           </Text>
           <Text>{fechaFormateada}</Text>
         </View>
         <View className="location" style={styles.eventLocation}>
           <Text numberOfLines={1} ellipsizeMode="tail">
-            {location}
+            {loc}
           </Text>
         </View>
       </View>
