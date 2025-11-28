@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '90%',
     height: height / 4.75,
-    backgroundColor: '#dbdbdb',
+    backgroundColor: '#dbdbdbff',
   },
   categoryContainer: {
     flexDirection: 'row',
