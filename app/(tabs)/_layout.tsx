@@ -1,9 +1,25 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
+import { View, Text } from 'react-native';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs
+      screenOptions={{
+        // Header
+        tabBarActiveTintColor: 'black',
+        headerTitleAlign: 'center',
+        headerTitle: () => (
+          // Esto es para darle estilos al logo
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <FontAwesome name="ticket" size={24} color="black" />
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+              Ticket
+              <Text style={{ color: 'red' }}>App</Text>
+            </Text>
+          </View>
+        ),
+      }}>
       <Tabs.Screen
         name="index"
         options={{
