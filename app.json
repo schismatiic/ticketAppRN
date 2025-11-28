@@ -3,6 +3,8 @@
     "name": "ticketAppRN",
     "slug": "ticketAppRN",
     "version": "1.0.0",
+    "scheme": "ticketapp",
+    "platforms": ["android", "ios"],
 
     "web": {
       "favicon": "./assets/favicon.png"
