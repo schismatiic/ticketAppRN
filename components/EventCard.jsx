@@ -1,41 +1,8 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native';
 import noPicture from '../assets/noPicture.png';
+import { MaterialIcons } from '@expo/vector-icons'; // import para íconos :D
 const height = Dimensions.get('window').height;
-// no me funciono tailwind muy bien asi que lo hice asi
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    margin: 12,
-    padding: 12,
-    borderRadius: 10,
-    color: '#666',
-    width: '90%',
-    height: height / 4.75,
-    backgroundColor: '#dbdbdb',
-    borderBottomColor: '#cacaca', //haha caca
-    borderBottomWidth: height / 160,
-  },
-  eventText: {
-    paddingLeft: 8,
-    flex: 1,
-    flexDirection: 'column',
-    padding: 4,
-  },
-  eventPicture: {
-    width: height / 5.2,
-    height: '100%',
-    borderRadius: 3,
-  },
-  eventTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  eventLocation: {
-    marginTop: 'auto',
-    marginLeft: 'auto',
-  },
-});
 
 export default function EventCard({ name, category, location, date, image }) {
   //formatear titulo
@@ -92,19 +59,71 @@ export default function EventCard({ name, category, location, date, image }) {
           {title}
         </Text>
         <View className="category">
-          <Text numberOfLines={1} ellipsizeMode="tail">
-            {cat}
-          </Text>
-          <Text>{fechaFormateada}</Text>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="music-note" size={17} color="black" />
+            <Text numberOfLines={1} ellipsizeMode="tail">
+              {cat}
+            </Text>
+          </View>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="event" size={17} color="black" />
+            <Text>{fechaFormateada}</Text>
+          </View>
         </View>
         <View className="location" style={styles.eventLocation}>
-          <Text numberOfLines={1} ellipsizeMode="tail">
-            {loc}
-          </Text>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="place" size={17} color="black" />
+            <Text numberOfLines={1} ellipsizeMode="tail">
+              {loc}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
   );
 }
-
+// no me funciono tailwind muy bien asi que lo hice asi
+// Me gusta más tener styles abajo
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    margin: 12,
+    padding: 12,
+    borderRadius: 10,
+    color: '#666',
+    width: '90%',
+    height: height / 4.75,
+    backgroundColor: '#dbdbdb',
+    borderBottomColor: '#cacaca', //haha caca
+    borderBottomWidth: height / 160,
+    shadowColor: '#000', //Lo siguiente es código para la sombra de las EventCard
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2, // Acá termina el código de la sombra
+  },
+  categoryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  eventText: {
+    paddingLeft: 8,
+    flex: 1,
+    flexDirection: 'column',
+    padding: 4,
+  },
+  eventPicture: {
+    width: height / 5.2,
+    height: '100%',
+    borderRadius: 3,
+  },
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  eventLocation: {
+    marginTop: 'auto',
+    marginLeft: 'auto',
+  },
+});
 // mas que nada faltaria agregar los iconos aca pero tu le sabes
