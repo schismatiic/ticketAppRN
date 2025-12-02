@@ -1,11 +1,27 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 
 export default function EventDetail() {
   const { name, category, location, date, image, tickets } = useLocalSearchParams();
   const ticketsParseados = JSON.parse(tickets);
   const fechaFormateada = new Date(date).toLocaleDateString('es-CL');
+
+  const [cantidades, setCantidades] = useState(Array(tickets.length).fill(0));
+
+  const incrementar = (index) => {
+    setCantidades(prev =>
+      prev.map((q, i) => i === index ? q + 1 : q)
+    );
+  };
+
+  const decrementar = (index) => {
+    setCantidades(prev =>
+      prev.map((q, i) => i === index ? Math.max(q - 1, 0) : q)
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: image }} style={styles.image} />
@@ -31,7 +47,15 @@ export default function EventDetail() {
             <View style={styles.ticketIndv}>
               <Text>{ticket.type}</Text>
               <Text>Stock: {ticketsParseados[i].available} </Text>
-              <Text>2</Text>
+              <Text>
+                <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
+                  <Text style={styles.buttonText}>-</Text>
+                </Pressable>
+                {cantidades[i]}
+                <Pressable style={styles.addButton} onPress={() => incrementar(i)}>
+                  <Text style={styles.buttonText}>+</Text>
+                </Pressable>
+              </Text>
             </View>
             <View style={styles.divider} />
           </View>
@@ -80,7 +104,15 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '25%',
   },
+    addButton: {
+    backgroundColor: 'black',
+    marginTop: 2,
+    borderRadius: 5,
+    padding: 1,
+    width: '25%',
+  },
   buttonText: {
     color: 'white',
+    textAlign: 'center',
   },
 });
