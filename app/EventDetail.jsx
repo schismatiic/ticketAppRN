@@ -27,8 +27,8 @@ export default function EventDetail() {
 
       <View style={styles.ticketInfo}>
         {ticketsParseados.map((ticket, i) => (
-          <View>
-            <View key={i} style={styles.ticketIndv}>
+          <View key={i}>
+            <View style={styles.ticketIndv}>
               <Text>{ticket.type}</Text>
               <Text>Stock: {ticketsParseados[i].available} </Text>
               <Text>2</Text>
