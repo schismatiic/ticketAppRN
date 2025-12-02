@@ -72,6 +72,7 @@ export default function Tab() {
               image={item.image}
               location={item.location}
               date={item.date}
+              tickets={item.tickets}  // añadí los tickets pa mostrarlos en el detalle
             />
           </Suspense>
         )}

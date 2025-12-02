@@ -6,7 +6,7 @@ import noPicture from '../assets/noPicture.png';
 
 const height = Dimensions.get('window').height;
 
-export default function EventCard({ name, category, location, date, image }) {
+export default function EventCard({ name, category, location, date, image, tickets }) {
   const router = useRouter();
 
   const [picture, setPicture] = useState(null);
@@ -37,7 +37,7 @@ export default function EventCard({ name, category, location, date, image }) {
       onPress={() =>
         router.push({
           pathname: '/EventDetail',
-          params: { name, category, location, date, image },
+          params: { name, category, location, date, image, tickets: JSON.stringify(tickets) }, // Le meti eso de los tickets
         })
       }>
       <Image style={styles.eventPicture} source={picture} />

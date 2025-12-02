@@ -3,7 +3,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function EventDetail() {
-  const { name, category, location, date, image } = useLocalSearchParams();
+  const { name, category, location, date, image, tickets } = useLocalSearchParams();
+  const ticketsParseados = JSON.parse(tickets);
   const fechaFormateada = new Date(date).toLocaleDateString('es-CL');
   return (
     <View style={styles.container}>
@@ -23,17 +24,20 @@ export default function EventDetail() {
         <MaterialIcons name="event" size={17} color="black" />
         <Text style={styles.text}>{fechaFormateada}</Text>
       </View>
+
       <View style={styles.ticketInfo}>
-        <View style={styles.ticketIndv}>
-          <Text>General</Text>
-          <Text>2</Text>
-        </View>
-        <View style={styles.divider} />
-        <View style={styles.ticketIndv}>
-          <Text>Cristofer</Text>
-          <Text>0</Text>
-        </View>
+        {ticketsParseados.map((ticket, i) => (
+          <View>
+            <View key={i} style={styles.ticketIndv}>
+              <Text>{ticket.type}</Text>
+              <Text>Stock: {ticketsParseados[i].available} </Text>
+              <Text>2</Text>
+            </View>
+            <View style={styles.divider} />
+          </View>
+        ))}
       </View>
+
       <Pressable style={styles.reservationButton}>
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
