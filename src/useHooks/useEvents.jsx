@@ -134,7 +134,7 @@ export function useGetEvents() {
     try {
       const dato = await api.getEvents(params);
       setData(dato);
-      return data;
+      return dato;
     } catch (err) {
       console.log("[DEBUG]: Error en useGetEvents, de useEvents.js");
       setError(err);
