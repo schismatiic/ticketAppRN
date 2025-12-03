@@ -6,6 +6,7 @@ import { usePostReservation } from '../src/useHooks/useReservations';
 
 export default function EventDetail() {
   const { _id, name, category, location, date, image, tickets } = useLocalSearchParams();
+  //const ticketsParseados = JSON.parse(tickets);
   const ticketsParseados = JSON.parse(tickets);
   const fechaFormateada = new Date(date).toLocaleDateString('es-CL');
 
@@ -19,7 +20,7 @@ export default function EventDetail() {
       items: cantidades.map((cantidad, i) => ({
         quantity: cantidad,
         type: ticketsParseados[i].type,
-      })),
+      })).filter(item => item.quantity > 0),
     }),
     [cantidades, ticketsParseados]
   );

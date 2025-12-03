@@ -69,12 +69,13 @@ export default function Tab() {
         renderItem={({ item }) => (
           <Suspense>
             <LazyCard
+              _id={item._id}
               name={item.name}
               category={item.category}
               image={item.image}
               location={item.location}
               date={item.date}
-              tickets={item.tickets} // añadí los tickets pa mostrarlos en el detalle
+              tickets={item.tickets} //JSON.stringify(item.tickets)  añadí los tickets pa mostrarlos en el detalle
             />
           </Suspense>
         )}
