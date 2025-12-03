@@ -12,6 +12,7 @@ import {
 import { useGetEvents } from '@/useHooks/useEvents';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import tuxGif from '../../assets/linux-tux.gif';
+import { SearchBar } from 'components/SearchBar';
 
 const height = Dimensions.get('window').height;
 const LazyCard = lazy(() =>
@@ -59,6 +60,7 @@ export default function Tab() {
   // reemplaze el scrollview por un view porque el flatlist explota dentro del scrollview
   return (
     <View style={styles.container} contentContainerStyle={styles.content}>
+      <SearchBar onSearch={getEvents} setEvents={setEvents} />
       <FlatList
         data={events}
         keyExtractor={(item) => item._id}
@@ -67,13 +69,12 @@ export default function Tab() {
         renderItem={({ item }) => (
           <Suspense>
             <LazyCard
-              _id={item._id} //añadí el id pa q lo pase igual
               name={item.name}
               category={item.category}
               image={item.image}
               location={item.location}
               date={item.date}
-              tickets={item.tickets}  // añadí los tickets pa mostrarlos en el detalle
+              tickets={item.tickets} // añadí los tickets pa mostrarlos en el detalle
             />
           </Suspense>
         )}

@@ -13,11 +13,11 @@ async function getEventbyId(id) {
 
     //Guardamos la respuesta como un json la tiramos a la consola y la retornamos
     const result = await response.json();
-    console.log("[DEBUG]: Respuesta de getEventbyId en events.js ", result);
+    console.log('[DEBUG]: Respuesta de getEventbyId en events.js ', result);
     return result;
   } catch (err) {
     //Esto automaticamente detecta errores y los retorna
-    console.log("[DEBUG]: Error en getEventbyId, en event.js");
+    console.log('[DEBUG]: Error en getEventbyId, en event.js');
     console.error(err.message);
     throw err;
   }
@@ -27,7 +27,7 @@ async function getEventbyId(id) {
 async function borra(id) {
   try {
     // Esperamos una respuesta de la api, notar que fetch tiene un argumento DELETE
-    const response = await fetch(api + `/events/${id}`, { method: "DELETE" });
+    const response = await fetch(api + `/events/${id}`, { method: 'DELETE' });
 
     // Vemos si llega una respuesta
     if (!response.ok) {
@@ -40,7 +40,7 @@ async function borra(id) {
     return result;
   } catch (err) {
     // Recibimos error
-    console.log("[DEBUG]: Error en borrar, en eventjs");
+    console.log('[DEBUG]: Error en borrar, en eventjs');
     console.error(err.message);
     throw err;
   }
@@ -52,8 +52,8 @@ async function post(newEvent) {
   try {
     //Creamos un nuevo evento, notar que recibe 4 argumentos, el link, el metodo, la cabecera y la info
     const response = await fetch(api + `/events`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newEvent),
     });
     // Ya la saben si la respuesta llega, seguimos sino cagamos todos
@@ -67,7 +67,7 @@ async function post(newEvent) {
     console.log(result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: Error en post, de event.js");
+    console.log('[DEBUG]: Error en post, de event.js');
     console.error(err.message);
     throw err;
   }
@@ -78,8 +78,8 @@ async function patch(id, parche) {
   //Recibimos la wea de resputa lol lean la wea de arriba nomas andres qlo
   try {
     const response = await fetch(api + `/events/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(parche),
     });
     if (!response.ok) {
@@ -89,7 +89,7 @@ async function patch(id, parche) {
     console.log(result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: Error en post, en event.js");
+    console.log('[DEBUG]: Error en post, en event.js');
     console.error(err.message);
     throw err;
   }
@@ -103,7 +103,7 @@ async function getP(params = {}) {
   for (const key in params) {
     const value = params[key];
 
-    if (value !== null && value !== undefined && value !== "") {
+    if (value !== null && value !== undefined && value !== '') {
       cleanParams[key] = value;
     }
   }
@@ -112,8 +112,8 @@ async function getP(params = {}) {
   // Insertamos en formato string los parametros usando URLSearchParams que automaticamente lo deja en el formaco correcto
   const queryString = new URLSearchParams(cleanParams).toString();
   // Aca creamos la url basicamente preguntandonos si cada seccion es correcta o no y finalmente la retornamos
-  const url = `${api}/events${queryString ? `?${queryString}` : ""}`;
-  console.log("[DEBUG]: URL generada es =>", url);
+  const url = `${api}/events${queryString ? `?${queryString}` : ''}`;
+  console.log('[DEBUG]: URL generada es =>', url);
 
   // Ahora si, ya que tenemos el URL procedemos normalmente
   try {
@@ -125,12 +125,12 @@ async function getP(params = {}) {
 
     // Guardamos la respuesta de la api en un json y lo retornamos
     const result = await response.json();
-    console.log("[DEBUG]: Respuesta getEvents", result);
+    console.log('[DEBUG]: Respuesta getEvents', result);
     return result;
 
     // Retornamos y erroes y tal ya se la saben desgraciados
   } catch (err) {
-    console.log("[DEBUG]: Error, en getEvents, en event.js");
+    console.log('[DEBUG]: Error, en getEvents, en event.js');
     console.error(err.message);
     throw err;
   }
