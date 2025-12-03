@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import reservationAPI from "../services/reservations";
+import { useState, useEffect } from 'react';
+import reservationAPI from '../services/reservations';
 
 const api = reservationAPI();
 
@@ -11,7 +11,7 @@ export function useReservation(id) {
 
   useEffect(() => {
     if (!id) {
-      console.log("[DEBUG nuro] no hay una id proporcionada");
+      console.log('[DEBUG nuro] no hay una id proporcionada');
       return;
     }
 
@@ -19,13 +19,13 @@ export function useReservation(id) {
       setLoading(true);
       setError(null);
 
-      console.log("[DEBUG nuro] intentando obtener reservación...");
+      console.log('[DEBUG nuro] intentando obtener reservación...');
       try {
         const reservacion = await api.getByID(id);
-        console.log("[DEBUG nuro] reservación obtenida:", reservacion);
+        console.log('[DEBUG nuro] reservación obtenida:', reservacion);
         setData(reservacion);
       } catch (err) {
-        console.log("[DEBUG nuro] error en getReservation()");
+        console.log('[DEBUG nuro] error en getReservation()');
         console.error(err);
         setError(err);
       } finally {
@@ -53,12 +53,12 @@ export function useDeleteReservation(id) {
       setError(null);
 
       try {
-        console.log("[DEBUG nuro] eliminando reserva con id:", id);
+        console.log('[DEBUG nuro] eliminando reserva con id:', id);
         const result = await api.borrar(id);
-        console.log("[DEBUG nuro] reserva eliminada:", result);
+        console.log('[DEBUG nuro] reserva eliminada:', result);
         setDeleted(result);
       } catch (err) {
-        console.log("[DEBUG nuro] error en deleteReservation()");
+        console.log('[DEBUG nuro] error en deleteReservation()');
         console.error(err);
         setError(err);
       } finally {
@@ -81,40 +81,31 @@ export function useDeleteReservation(id) {
 //   ]
 // }
 
-export function usePostReservation() {
-  const [id, setId] = useState("");
+export function usePostReservation(reservation) {
+  const [id, setId] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ✅ función manual para enviar la reserva
-  const postReservation = async (reservation) => {
-    if (!reservation) {
-      console.warn(
-        "[DEBUG nuro] No se proporcionó ninguna reserva para enviar."
-      );
-      return;
-    }
+  // vamos a reescribir esto q el leo la embarro en la presentacion pasada y aun asi no funciono
+  // aunque funciono cuando lo probamos pasamo a presentar y no funco
+  // pero bueno voy a reescribir esta funcion como los hooks del benja
+
+  async function post(reservation) {
+    if (!reservation) return;
 
     setLoading(true);
-    setError(null);
-
     try {
-      console.log("[DEBUG nuro] intentando postear reserva:", reservation);
-      const post = await api.post(reservation);
-      console.log("[DEBUG nuro] respuesta del post:", post);
-      setData(post);
-      setId(post.reservation_id);
-      return post;
+      const dato = await api.post(reservation);
+      setData(dato);
+      return data;
     } catch (err) {
-      console.log("[DEBUG nuro] error en postReservation()");
-      console.error(err);
+      console.log('Error en usePostReservation');
       setError(err);
       throw err;
     } finally {
       setLoading(false);
     }
-  };
-
-  return { postReservation, id, data, loading, error };
+  }
+  return { post, data, loading, error };
 }
