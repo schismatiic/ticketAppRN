@@ -67,6 +67,7 @@ export default function Tab() {
         renderItem={({ item }) => (
           <Suspense>
             <LazyCard
+              _id={item._id} //añadí el id pa q lo pase igual
               name={item.name}
               category={item.category}
               image={item.image}

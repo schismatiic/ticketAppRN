@@ -1,14 +1,31 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Modal } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { usePostReservation } from "../src/useHooks/useReservations";
 
 export default function EventDetail() {
-  const { name, category, location, date, image, tickets } = useLocalSearchParams();
+  const { _id, name, category, location, date, image, tickets } = useLocalSearchParams();
   const ticketsParseados = JSON.parse(tickets);
   const fechaFormateada = new Date(date).toLocaleDateString('es-CL');
 
-  const [cantidades, setCantidades] = useState(Array(tickets.length).fill(0));
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cantidades, setCantidades] = useState(Array(ticketsParseados.length).fill(0));
+  const [ticketActual, setTicketActual] = useState(0);
+
+  const { postReservation, data, loading, error } = usePostReservation();
+
+  const potencialReserva = {
+    event_id: _id, // el id del evento
+    items: [],
+  };
+
+  useEffect(() => {
+    potencialReserva.items = cantidades.map((cantidad, i) => ({
+      quantity: cantidad,
+      type: ticketsParseados[i].type,
+    }))
+  }, [cantidades]);
 
   const incrementar = (index) => {
     setCantidades(prev =>
@@ -46,7 +63,7 @@ export default function EventDetail() {
           <View key={i}>
             <View style={styles.ticketIndv}>
               <Text>{ticket.type}</Text>
-              <Text>Stock: {ticketsParseados[i].available} </Text>
+              <Text>¡Quedan {ticketsParseados[i].available}! </Text>
               <Text>
                 <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
                   <Text style={styles.buttonText}>-</Text>
@@ -62,9 +79,32 @@ export default function EventDetail() {
         ))}
       </View>
 
-      <Pressable style={styles.reservationButton}>
+      <Pressable style={styles.reservationButton} onPress={async () => {
+        try {
+          const result = await postReservation(potencialReserva);
+          console.log("Reserva creada:", result);
+          alert("Reserva exitosa!");
+          setIsModalVisible(true); // cerrar modal si quieres
+        } catch (err) {
+          alert("Ocurrió un error al crear la reserva");
+        }
+      }}>
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
+
+      <View>
+        <Modal transparent visible={isModalVisible} animationType="slide">
+          <View style={styles.modalBackground}>
+            <View style={styles.bottomSheet}>
+              <Text>ALOALO</Text>
+              <Pressable style={styles.addButton} onPress={() => setIsModalVisible(false)}>
+                <Text style={styles.buttonText}>desmostrar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
     </View>
   );
 }
@@ -114,5 +154,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'flex-end', // hace que el contenido se alinee abajo
+    backgroundColor: 'rgba(0,0,0,0.3)', // fondo semitransparente
+  },
+  bottomSheet: {
+    height: '75%',             // ocupa la mitad de la pantalla
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
   },
 });

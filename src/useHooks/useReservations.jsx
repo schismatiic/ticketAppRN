@@ -104,7 +104,7 @@ export function usePostReservation() {
       const post = await api.post(reservation);
       console.log("[DEBUG nuro] respuesta del post:", post);
       setData(post);
-      setId(post.reservation_id || "");
+      setId(post.reservation_id);
       return post;
     } catch (err) {
       console.log("[DEBUG nuro] error en postReservation()");
