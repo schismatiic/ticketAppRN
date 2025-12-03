@@ -12,8 +12,7 @@ export default function EventDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cantidades, setCantidades] = useState(Array(ticketsParseados.length).fill(0));
   const [ticketActual, setTicketActual] = useState(0);
-  //evitar loop infinito
-  const { postReservation, data, loading, error } = usePostReservation();
+  const { post, data, loading, error } = usePostReservation();
   const potencialReserva = useMemo(
     () => ({
       event_id: _id,
@@ -76,13 +75,16 @@ export default function EventDetail() {
       <Pressable
         style={styles.reservationButton}
         onPress={async () => {
+          console.log(_id);
+          console.log('potencialReserva:', JSON.stringify(potencialReserva, null, 2));
           try {
-            const result = await postReservation(potencialReserva);
+            const result = await post(potencialReserva);
             console.log('Reserva creada:', result);
             alert('Reserva exitosa!');
             setIsModalVisible(true); // cerrar modal si quieres
           } catch (err) {
-            alert('Ocurrió un error al crear la reserva');
+            console.error(err.message);
+            alert('Error al crear reserva');
           }
         }}>
         <Text style={styles.buttonText}>Reservar</Text>
