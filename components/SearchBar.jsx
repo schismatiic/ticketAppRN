@@ -1,6 +1,7 @@
 import { View, TextInput, Pressable, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import { useTheme } from '../ThemeContext';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export function SearchBar({ onSearch, setEvents }) {
   const [data, setData] = React.useState('');
@@ -24,7 +25,7 @@ export function SearchBar({ onSearch, setEvents }) {
       />
 
       <Pressable style={styles.boton} onPress={handledata}>
-        <Text style={styles.botonText}>Buscar</Text>
+        <MaterialIcons name="search" size={21} color={styles.icon.color} />
       </Pressable>
     </View>
   );
@@ -39,7 +40,7 @@ const getStyles = (theme) =>
       justifyContent: 'center',
       width: '100%',
       paddingHorizontal: 10,
-      marginTop: 10,
+      paddingVertical: 10,
     },
     input: {
       flex: 1,
@@ -49,16 +50,19 @@ const getStyles = (theme) =>
       backgroundColor: theme === 'light' ? '#fff' : '#222',
       color: theme === 'light' ? '#000' : '#fff',
       paddingHorizontal: 10,
-      borderRadius: 8,
+      borderRadius: 25,
     },
     boton: {
       paddingHorizontal: 15,
       paddingVertical: 10,
       backgroundColor: theme === 'light' ? '#ddd' : '#444',
-      borderRadius: 8,
+      borderRadius: 25,
     },
     botonText: {
       fontWeight: 'bold',
       color: theme === 'light' ? '#000' : '#fff',
+    },
+    icon: {
+      color: theme === 'light' ? '#000' : '#e5e5e5',
     },
   });
