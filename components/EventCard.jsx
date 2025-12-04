@@ -3,11 +3,14 @@ import { View, Text, Image, Dimensions, StyleSheet, Pressable } from 'react-nati
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import noPicture from '../assets/noPicture.png';
+import { useTheme } from '../ThemeContext';
 
 const height = Dimensions.get('window').height;
 
-export default function EventCard({_id, name, category, location, date, image, tickets }) {
+export default function EventCard({ _id, name, category, location, date, image, tickets }) {
   const router = useRouter();
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
 
   const [picture, setPicture] = useState(null);
   const [title, setTitle] = useState('');
@@ -37,7 +40,7 @@ export default function EventCard({_id, name, category, location, date, image, t
       onPress={() =>
         router.push({
           pathname: '/EventDetail',
-          params: {_id, name, category, location, date, image, tickets: JSON.stringify(tickets) }, // Le meti eso de los tickets
+          params: { _id, name, category, location, date, image, tickets: JSON.stringify(tickets) },
         })
       }>
       <Image style={styles.eventPicture} source={picture} />
@@ -48,51 +51,63 @@ export default function EventCard({_id, name, category, location, date, image, t
         </Text>
 
         <View style={styles.categoryContainer}>
-          <MaterialIcons name="music-note" size={17} color="black" />
-          <Text numberOfLines={1}>{cat}</Text>
+          <MaterialIcons name="music-note" size={17} color={styles.icon.color} />
+          <Text style={styles.text} numberOfLines={1}>
+            {cat}
+          </Text>
         </View>
 
         <View style={styles.categoryContainer}>
-          <MaterialIcons name="event" size={17} color="black" />
-          <Text>{fechaFormateada}</Text>
+          <MaterialIcons name="event" size={17} color={styles.icon.color} />
+          <Text style={styles.text}>{fechaFormateada}</Text>
         </View>
 
         <View style={styles.categoryContainer}>
-          <MaterialIcons name="place" size={17} color="black" />
-          <Text numberOfLines={1}>{loc}</Text>
+          <MaterialIcons name="place" size={17} color={styles.icon.color} />
+          <Text style={styles.text} numberOfLines={1}>
+            {loc}
+          </Text>
         </View>
       </View>
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    margin: 12,
-    padding: 12,
-    borderRadius: 10,
-    width: '90%',
-    height: height / 4.75,
-    backgroundColor: '#dbdbdbff',
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  eventText: {
-    paddingLeft: 8,
-    flex: 1,
-  },
-  eventPicture: {
-    width: height / 5.2,
-    height: '100%',
-    borderRadius: 3,
-    backgroundColor: '#0000002d',
-  },
-  eventTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      margin: 12,
+      padding: 12,
+      borderRadius: 10,
+      width: '90%',
+      height: height / 4.75,
+      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+    },
+    categoryContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+    },
+    eventText: {
+      paddingLeft: 8,
+      flex: 1,
+    },
+    eventPicture: {
+      width: height / 5.2,
+      height: '100%',
+      borderRadius: 3,
+      backgroundColor: theme === 'light' ? '#0000002d' : '#55555555',
+    },
+    eventTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: theme === 'light' ? '#000' : '#fff',
+    },
+    text: {
+      color: theme === 'light' ? '#000' : '#e5e5e5',
+    },
+    icon: {
+      color: theme === 'light' ? '#000' : '#e5e5e5',
+    },
+  });

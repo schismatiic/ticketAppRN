@@ -3,24 +3,27 @@ import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useEffect, useMemo } from 'react';
 import { usePostReservation } from '../src/useHooks/useReservations';
+import { useTheme } from '../ThemeContext';
 
 export default function EventDetail() {
+  const { theme } = useTheme();
   const { _id, name, category, location, date, image, tickets } = useLocalSearchParams();
-  //const ticketsParseados = JSON.parse(tickets);
   const ticketsParseados = JSON.parse(tickets);
   const fechaFormateada = new Date(date).toLocaleDateString('es-CL');
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cantidades, setCantidades] = useState(Array(ticketsParseados.length).fill(0));
-  const [ticketActual, setTicketActual] = useState(0);
-  const { post, data, loading, error } = usePostReservation();
+  const { post } = usePostReservation();
+
   const potencialReserva = useMemo(
     () => ({
       event_id: _id,
-      items: cantidades.map((cantidad, i) => ({
-        quantity: cantidad,
-        type: ticketsParseados[i].type,
-      })).filter(item => item.quantity > 0),
+      items: cantidades
+        .map((cantidad, i) => ({
+          quantity: cantidad,
+          type: ticketsParseados[i].type,
+        }))
+        .filter((item) => item.quantity > 0),
     }),
     [cantidades, ticketsParseados]
   );
@@ -33,31 +36,32 @@ export default function EventDetail() {
     setCantidades((prev) => prev.map((q, i) => (i === index ? Math.max(q - 1, 0) : q)));
   };
 
+  const styles = getStyles(theme);
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: image }} style={styles.image} />
-
       <Text style={styles.title}>{name}</Text>
       <View style={styles.categoryContainer}>
-        <MaterialIcons name="music-note" size={17} color="black" />
+        <MaterialIcons name="music-note" size={17} color={theme === 'light' ? 'black' : 'white'} />
         <Text style={styles.text}>{category}</Text>
       </View>
-
       <View style={styles.categoryContainer}>
-        <MaterialIcons name="place" size={17} color="black" />
+        <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
         <Text style={styles.text}>{location}</Text>
       </View>
       <View style={styles.categoryContainer}>
-        <MaterialIcons name="event" size={17} color="black" />
+        <MaterialIcons name="event" size={17} color={theme === 'light' ? 'black' : 'white'} />
         <Text style={styles.text}>{fechaFormateada}</Text>
       </View>
-
       <View style={styles.ticketInfo}>
         {ticketsParseados.map((ticket, i) => (
           <View key={i}>
             <View style={styles.ticketIndv}>
-              <Text>{ticket.type}</Text>
-              <Text>¡Quedan {ticketsParseados[i].available}! </Text>
+              <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>{ticket.type}</Text>
+              <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>
+                ¡Quedan {ticketsParseados[i].available}!
+              </Text>
               <Text>
                 <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
                   <Text style={styles.buttonText}>-</Text>
@@ -72,97 +76,81 @@ export default function EventDetail() {
           </View>
         ))}
       </View>
-
       <Pressable
         style={styles.reservationButton}
         onPress={async () => {
-          console.log(_id);
-          console.log('potencialReserva:', JSON.stringify(potencialReserva, null, 2));
           try {
-            const result = await post(potencialReserva);
-            console.log('Reserva creada:', result);
+            await post(potencialReserva);
             alert('Reserva exitosa!');
-            setIsModalVisible(true); // cerrar modal si quieres
+            setIsModalVisible(true);
           } catch (err) {
-            console.error(err.message);
             alert('Error al crear reserva');
           }
         }}>
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
-
-      <View>
-        <Modal transparent visible={isModalVisible} animationType="slide">
-          <View style={styles.modalBackground}>
-            <View style={styles.bottomSheet}>
-              <Text>ALOALO</Text>
-              <Pressable style={styles.addButton} onPress={() => setIsModalVisible(false)}>
-                <Text style={styles.buttonText}>desmostrar</Text>
-              </Pressable>
-            </View>
+      <Modal transparent visible={isModalVisible} animationType="slide">
+        <View style={styles.modalBackground}>
+          <View style={styles.bottomSheet}>
+            <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>ALOALO</Text>
+            <Pressable style={styles.addButton} onPress={() => setIsModalVisible(false)}>
+              <Text style={styles.buttonText}>desmostrar</Text>
+            </Pressable>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { padding: 20 },
-  image: { width: '100%', height: 250, borderRadius: 10, backgroundColor: '#0000002d' },
-  title: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginVertical: 15,
-  },
-  text: { fontSize: 18, marginVertical: 4 },
-  categoryContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  ticketInfo: {
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'black',
-    padding: 20,
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: 'black',
-    marginVertical: 8,
-  },
-  ticketIndv: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  reservationButton: {
-    backgroundColor: 'black',
-    marginTop: 20,
-    borderRadius: 10,
-    padding: 10,
-    width: '25%',
-  },
-  addButton: {
-    backgroundColor: 'black',
-    marginTop: 2,
-    borderRadius: 5,
-    padding: 1,
-    width: '25%',
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'flex-end', // hace que el contenido se alinee abajo
-    backgroundColor: 'rgba(0,0,0,0.3)', // fondo semitransparente
-  },
-  bottomSheet: {
-    height: '75%', // ocupa la mitad de la pantalla
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-  },
-});
+const getStyles = (theme) =>
+  StyleSheet.create({
+    container: { padding: 20, backgroundColor: theme === 'light' ? '#fff' : '#000', flex: 1 },
+    image: { width: '100%', height: 250, borderRadius: 10, backgroundColor: '#0000002d' },
+    title: {
+      fontSize: 25,
+      fontWeight: 'bold',
+      marginVertical: 15,
+      color: theme === 'light' ? '#000' : '#fff',
+    },
+    text: { fontSize: 18, marginVertical: 4, color: theme === 'light' ? '#000' : '#fff' },
+    categoryContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    ticketInfo: {
+      width: '100%',
+      backgroundColor: theme === 'light' ? '#fff' : '#1a1a1a',
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme === 'light' ? 'black' : 'white',
+      padding: 20,
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: theme === 'light' ? 'black' : 'white',
+      marginVertical: 8,
+    },
+    ticketIndv: { flexDirection: 'row', justifyContent: 'space-between' },
+    reservationButton: {
+      backgroundColor: 'black',
+      marginTop: 20,
+      borderRadius: 10,
+      padding: 10,
+      width: '25%',
+    },
+    addButton: {
+      backgroundColor: 'black',
+      marginTop: 2,
+      borderRadius: 5,
+      padding: 1,
+      width: '25%',
+    },
+    buttonText: { color: 'white', textAlign: 'center' },
+    modalBackground: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.3)' },
+    bottomSheet: {
+      height: '75%',
+      backgroundColor: theme === 'light' ? '#fff' : '#1a1a1a',
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      padding: 20,
+    },
+  });

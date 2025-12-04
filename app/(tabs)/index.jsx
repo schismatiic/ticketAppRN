@@ -1,31 +1,31 @@
 import {
-  ScrollView,
+  View,
   Text,
   StyleSheet,
   ActivityIndicator,
-  View,
   Image,
   Dimensions,
   FlatList,
 } from 'react-native';
-//import EventCard from 'components/EventCard';
 import { useGetEvents } from '@/useHooks/useEvents';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import tuxGif from '../../assets/linux-tux.gif';
 import { SearchBar } from 'components/SearchBar';
+import { useTheme } from '../../ThemeContext';
 
 const height = Dimensions.get('window').height;
 const LazyCard = lazy(() =>
-  import('../../components/EventCard').then((m) => ({
-    default: m.default,
-  }))
+  import('../../components/EventCard').then((m) => ({ default: m.default }))
 );
 
 export default function Tab() {
-  const { getEvents, data, isLoading, error } = useGetEvents(); // hay que modificar el hook para el lazy scrolling
-  const [tux, setTux] = useState(null); // hay que poner el tux hehe
+  const { getEvents, data, isLoading } = useGetEvents();
+  const [tux, setTux] = useState(null);
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(1);
+  const { theme } = useTheme();
+
+  const styles = getStyles(theme);
 
   useEffect(() => {
     if (!data) {
@@ -43,29 +43,25 @@ export default function Tab() {
 
   useEffect(() => {
     const i = Math.floor(Math.random() * 11);
-    if (i === 10) {
-      setTux(true);
-    } else {
-      setTux(false);
-    }
+    setTux(i === 10);
   }, []);
 
   useEffect(() => {
     if (data?.data) {
-      setEvents((arr) => [...arr, ...data.data]); // hacemos append al array antiwo con los eventos cargados
+      setEvents((arr) => [...arr, ...data.data]);
     }
   }, [data]);
 
-  console.log(events);
-  // reemplaze el scrollview por un view porque el flatlist explota dentro del scrollview
   return (
-    <View style={styles.container} contentContainerStyle={styles.content}>
+    <View style={styles.container}>
       <SearchBar onSearch={getEvents} setEvents={setEvents} />
+
       <FlatList
         data={events}
         keyExtractor={(item) => item._id}
         onEndReached={loadEvents}
         onEndReachedThreshold={0.2}
+        contentContainerStyle={styles.content}
         renderItem={({ item }) => (
           <Suspense>
             <LazyCard
@@ -75,41 +71,41 @@ export default function Tab() {
               image={item.image}
               location={item.location}
               date={item.date}
-              tickets={item.tickets} //JSON.stringify(item.tickets)  añadí los tickets pa mostrarlos en el detalle
+              tickets={item.tickets}
             />
           </Suspense>
         )}
       />
 
-      {isLoading && !tux ? (
-        <View className="flex-1 items-center justify-center" style={styles.spinner}>
-          <ActivityIndicator size={'large'} color={'#0000ff'} />
-          <Text>Loading</Text>
+      {isLoading && (
+        <View style={styles.spinner}>
+          {tux ? (
+            <Image source={tuxGif} style={styles.tux} />
+          ) : (
+            <ActivityIndicator size="large" color={theme === 'light' ? '#0000ff' : '#00ffff'} />
+          )}
+          <Text style={{ color: theme === 'light' ? '#000' : '#fff', marginTop: 8 }}>Loading</Text>
         </View>
-      ) : null}
-      {isLoading && tux ? (
-        <View className="flex-1 items-center justify-center" style={styles.spinner}>
-          <Image source={tuxGif} style={styles.tux} />
-          <Text>Loading</Text>
-        </View>
-      ) : null}
+      )}
     </View>
   );
 }
-// por aburrimiento hice que un 10% de las veces en vez de un spinner sale un tux
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: { alignItems: 'center' },
-  spinner: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tux: {
-    margin: 16,
-    height: height / 12,
-    width: height / 12,
-  },
-});
+
+const getStyles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme === 'light' ? '#fff' : '#000',
+    },
+    content: { alignItems: 'center' },
+    spinner: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    tux: {
+      margin: 16,
+      height: height / 12,
+      width: height / 12,
+    },
+  });
