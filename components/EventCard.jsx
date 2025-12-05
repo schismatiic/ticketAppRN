@@ -58,8 +58,8 @@ export default function EventCard({ _id, name, category, location, date, image, 
         <LinearGradient // Vertical
           colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
           locations={[0, 0.35]}
-          start={{ x: 0.5, y: 0 }} // start from right
-          end={{ x: 0.5, y: 1 }} // fade to left
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
           style={styles.leftGradient}
         />
       </View>
@@ -72,7 +72,11 @@ export default function EventCard({ _id, name, category, location, date, image, 
             <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
               {cat}
             </Text>
-            <MaterialIcons name="music-note" size={17} color={styles.icon.color} />
+            <MaterialIcons
+              name="label" //le cambie el icono de musica a una etiqueta porque no siempre va a ser un concierto
+              size={17}
+              color={styles.icon.color}
+            />
           </View>
 
           <View style={styles.categoryContainer}>
@@ -88,7 +92,7 @@ export default function EventCard({ _id, name, category, location, date, image, 
           </View>
         </View>
         <View style={styles.nextIcon}>
-          <MaterialIcons name="navigate-next" size={32} color={styles.text.color} />
+          <MaterialIcons name="chevron-right" size={30} color={styles.text.color} />
         </View>
       </View>
     </Pressable>
@@ -112,7 +116,8 @@ const getStyles = (theme) =>
       marginLeft: 'auto',
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      width: '100%',
+      justifyContent: 'space-between',
     },
     nextIcon: {
       marginLeft: 'auto',
@@ -124,7 +129,8 @@ const getStyles = (theme) =>
       marginLeft: 'auto',
       paddingRight: 8,
       flex: 1,
-      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
     },
     eventPicture: {
       position: 'relative',
