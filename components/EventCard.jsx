@@ -49,46 +49,38 @@ export default function EventCard({ _id, name, category, location, date, image, 
 
         <LinearGradient // Horizontal
           colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
-          locations={[0.05, 0.95]}
+          locations={[0.1, 0.65]} // porcentaje que ocupara la gradiente
           start={{ x: 1, y: 0.5 }} // start from right
           end={{ x: 0, y: 0.5 }} // fade to left
           style={styles.leftGradient}
         />
-
-        <LinearGradient // Vertical
-          colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
-          locations={[0, 0.35]}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={styles.leftGradient}
-        />
       </View>
-      <Text style={styles.eventTitle} numberOfLines={2} ellipsizeMode="tail">
+      <Text style={styles.eventTitle} numberOfLines={1} ellipsizeMode="tail">
         {title}
       </Text>
       <View style={styles.eventText}>
         <View>
           <View style={styles.categoryContainer}>
-            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
-              {cat}
-            </Text>
             <MaterialIcons
               name="label" //le cambie el icono de musica a una etiqueta porque no siempre va a ser un concierto
               size={17}
               color={styles.icon.color}
             />
+            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+              {cat}
+            </Text>
           </View>
 
           <View style={styles.categoryContainer}>
-            <Text style={styles.text}>{fechaFormateada}</Text>
             <MaterialIcons name="event" size={17} color={styles.icon.color} />
+            <Text style={styles.text}>{fechaFormateada}</Text>
           </View>
 
           <View style={styles.categoryContainer}>
+            <MaterialIcons name="place" size={17} color={styles.icon.color} />
             <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
               {loc}
             </Text>
-            <MaterialIcons name="place" size={17} color={styles.icon.color} />
           </View>
         </View>
         <View style={styles.nextIcon}>
@@ -102,8 +94,6 @@ export default function EventCard({ _id, name, category, location, date, image, 
 const getStyles = (theme) =>
   StyleSheet.create({
     container: {
-      borderTopColor: '#ff0066',
-      borderTopWidth: height / 105,
       display: 'flex',
       flexDirection: 'row',
       margin: 12,
@@ -113,11 +103,9 @@ const getStyles = (theme) =>
       backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
     },
     categoryContainer: {
-      marginLeft: 'auto',
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       width: '100%',
-      justifyContent: 'space-between',
     },
     nextIcon: {
       marginLeft: 'auto',
@@ -126,30 +114,37 @@ const getStyles = (theme) =>
     eventText: {
       width: '100%',
       marginTop: 'auto',
+      marginBottom: '8',
       marginLeft: 'auto',
       paddingRight: 8,
       flex: 1,
       flexDirection: 'column',
-      justifyContent: 'space-between',
+      alignItems: 'flex-end',
     },
     eventPicture: {
       position: 'relative',
       borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
+      borderTopLeftRadius: 10,
       width: height / 4.75,
       height: '100%',
       backgroundColor: theme === 'light' ? '#0000002d' : '#55555555',
     },
     eventTitle: {
+      borderTopWidth: height / 256,
+      borderTopColor: '#ff0066',
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10,
       flexShrink: 1,
       width: '100%',
-      padding: 4,
       position: 'absolute',
-      fontSize: 20,
+      fontSize: 17,
       fontWeight: 'bold',
+      paddingLeft: 8,
+      paddingRight: 8,
+      paddingBottom: 1,
+      paddingTop: 1,
       color: theme === 'light' ? '#000' : '#fff',
-      textShadowColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
-      textShadowRadius: 6,
+      backgroundColor: theme === 'light' ? 'rgba(219, 219, 219, 0.5)' : 'rgba(30, 30, 30, 0.5)',
     },
     imageWrapper: {
       position: 'relative',
