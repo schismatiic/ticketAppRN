@@ -99,7 +99,7 @@ const getStyles = (theme) =>
       margin: 12,
       borderRadius: 10,
       width: '90%',
-      height: height / 4.75,
+      height: height / 5,
       backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
     },
     categoryContainer: {
