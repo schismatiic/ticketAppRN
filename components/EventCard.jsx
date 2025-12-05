@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import noPicture from '../assets/noPicture.png';
 import { useTheme } from '../ThemeContext';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const height = Dimensions.get('window').height;
 
@@ -43,30 +44,51 @@ export default function EventCard({ _id, name, category, location, date, image, 
           params: { _id, name, category, location, date, image, tickets: JSON.stringify(tickets) },
         })
       }>
-      <Image style={styles.eventPicture} source={picture} />
+      <View>
+        <Image style={styles.eventPicture} source={picture} />
 
+        <LinearGradient // Horizontal
+          colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
+          locations={[0, 0.9]}
+          start={{ x: 1, y: 0.5 }} // start from right
+          end={{ x: 0, y: 0.5 }} // fade to left
+          style={styles.leftGradient}
+        />
+
+        <LinearGradient // Vertical
+          colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
+          locations={[0, 0.4]}
+          start={{ x: 0.5, y: 0 }} // start from right
+          end={{ x: 0.5, y: 1 }} // fade to left
+          style={styles.leftGradient}
+        />
+      </View>
+      <Text style={styles.eventTitle} numberOfLines={2} ellipsizeMode="tail">
+        {title}
+      </Text>
       <View style={styles.eventText}>
-        <Text style={styles.eventTitle} numberOfLines={2} ellipsizeMode="tail">
-          {title}
-        </Text>
+        <View>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="music-note" size={17} color={styles.icon.color} />
+            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+              {cat}
+            </Text>
+          </View>
 
-        <View style={styles.categoryContainer}>
-          <MaterialIcons name="music-note" size={17} color={styles.icon.color} />
-          <Text style={styles.text} numberOfLines={1}>
-            {cat}
-          </Text>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="event" size={17} color={styles.icon.color} />
+            <Text style={styles.text}>{fechaFormateada}</Text>
+          </View>
+
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="place" size={17} color={styles.icon.color} />
+            <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
+              {loc}
+            </Text>
+          </View>
         </View>
-
-        <View style={styles.categoryContainer}>
-          <MaterialIcons name="event" size={17} color={styles.icon.color} />
-          <Text style={styles.text}>{fechaFormateada}</Text>
-        </View>
-
-        <View style={styles.categoryContainer}>
-          <MaterialIcons name="place" size={17} color={styles.icon.color} />
-          <Text style={styles.text} numberOfLines={1}>
-            {loc}
-          </Text>
+        <View style={styles.nextIcon}>
+          <MaterialIcons name="navigate-next" size={32} color={styles.icon.color} />
         </View>
       </View>
     </Pressable>
@@ -76,9 +98,11 @@ export default function EventCard({ _id, name, category, location, date, image, 
 const getStyles = (theme) =>
   StyleSheet.create({
     container: {
+      borderTopColor: '#f00',
+      borderTopWidth: height / 100,
+      display: 'flex',
       flexDirection: 'row',
       margin: 12,
-      padding: 12,
       borderRadius: 10,
       width: '90%',
       height: height / 4.75,
@@ -89,23 +113,55 @@ const getStyles = (theme) =>
       alignItems: 'center',
       gap: 4,
     },
+    nextIcon: {
+      flexDirection: 'row',
+      margin: 4,
+      marginLeft: 'auto',
+    },
     eventText: {
+      width: '100%',
+      marginTop: 'auto',
       paddingLeft: 8,
       flex: 1,
+      alignItems: 'flex-start',
     },
     eventPicture: {
-      width: height / 5.2,
+      position: 'relative',
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
+      width: height / 4.75,
       height: '100%',
-      borderRadius: 3,
       backgroundColor: theme === 'light' ? '#0000002d' : '#55555555',
     },
     eventTitle: {
-      fontSize: 18,
+      flexShrink: 1,
+      width: '100%',
+      padding: 4,
+      position: 'absolute',
+      fontSize: 20,
       fontWeight: 'bold',
       color: theme === 'light' ? '#000' : '#fff',
     },
+    imageWrapper: {
+      position: 'relative',
+      width: height / 4.75,
+      height: '100%',
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
+      overflow: 'hidden',
+    },
+
+    leftGradient: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      width: '100%',
+      height: '100%',
+    },
     text: {
       color: theme === 'light' ? '#000' : '#e5e5e5',
+      flexShrink: 1,
+      width: '85%',
     },
     icon: {
       color: theme === 'light' ? '#000' : '#e5e5e5',
