@@ -49,7 +49,7 @@ export default function EventCard({ _id, name, category, location, date, image, 
 
         <LinearGradient // Horizontal
           colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
-          locations={[0, 0.9]}
+          locations={[0.05, 0.95]}
           start={{ x: 1, y: 0.5 }} // start from right
           end={{ x: 0, y: 0.5 }} // fade to left
           style={styles.leftGradient}
@@ -57,7 +57,7 @@ export default function EventCard({ _id, name, category, location, date, image, 
 
         <LinearGradient // Vertical
           colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
-          locations={[0, 0.4]}
+          locations={[0, 0.35]}
           start={{ x: 0.5, y: 0 }} // start from right
           end={{ x: 0.5, y: 1 }} // fade to left
           style={styles.leftGradient}
@@ -69,26 +69,26 @@ export default function EventCard({ _id, name, category, location, date, image, 
       <View style={styles.eventText}>
         <View>
           <View style={styles.categoryContainer}>
-            <MaterialIcons name="music-note" size={17} color={styles.icon.color} />
             <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
               {cat}
             </Text>
+            <MaterialIcons name="music-note" size={17} color={styles.icon.color} />
           </View>
 
           <View style={styles.categoryContainer}>
-            <MaterialIcons name="event" size={17} color={styles.icon.color} />
             <Text style={styles.text}>{fechaFormateada}</Text>
+            <MaterialIcons name="event" size={17} color={styles.icon.color} />
           </View>
 
           <View style={styles.categoryContainer}>
-            <MaterialIcons name="place" size={17} color={styles.icon.color} />
             <Text style={styles.text} numberOfLines={1} ellipsizeMode="tail">
               {loc}
             </Text>
+            <MaterialIcons name="place" size={17} color={styles.icon.color} />
           </View>
         </View>
         <View style={styles.nextIcon}>
-          <MaterialIcons name="navigate-next" size={32} color={styles.icon.color} />
+          <MaterialIcons name="navigate-next" size={32} color={styles.text.color} />
         </View>
       </View>
     </Pressable>
@@ -98,8 +98,8 @@ export default function EventCard({ _id, name, category, location, date, image, 
 const getStyles = (theme) =>
   StyleSheet.create({
     container: {
-      borderTopColor: '#f00',
-      borderTopWidth: height / 100,
+      borderTopColor: '#ff0066',
+      borderTopWidth: height / 105,
       display: 'flex',
       flexDirection: 'row',
       margin: 12,
@@ -109,21 +109,22 @@ const getStyles = (theme) =>
       backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
     },
     categoryContainer: {
+      marginLeft: 'auto',
       flexDirection: 'row',
       alignItems: 'center',
       gap: 4,
     },
     nextIcon: {
-      flexDirection: 'row',
-      margin: 4,
       marginLeft: 'auto',
+      paddingBottom: 4,
     },
     eventText: {
       width: '100%',
       marginTop: 'auto',
-      paddingLeft: 8,
+      marginLeft: 'auto',
+      paddingRight: 8,
       flex: 1,
-      alignItems: 'flex-start',
+      alignItems: 'center',
     },
     eventPicture: {
       position: 'relative',
@@ -141,6 +142,8 @@ const getStyles = (theme) =>
       fontSize: 20,
       fontWeight: 'bold',
       color: theme === 'light' ? '#000' : '#fff',
+      textShadowColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+      textShadowRadius: 6,
     },
     imageWrapper: {
       position: 'relative',
@@ -164,6 +167,6 @@ const getStyles = (theme) =>
       width: '85%',
     },
     icon: {
-      color: theme === 'light' ? '#000' : '#e5e5e5',
+      color: '#ff0066',
     },
   });
