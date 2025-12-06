@@ -4,72 +4,62 @@ import reservationAPI from '../services/reservations';
 const api = reservationAPI();
 
 // 🔹 GET RESERVATION BY ID
-export function useReservation(id) {
+export function useReservation() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
+  async function getReservationById(id) {
     if (!id) {
       console.log('[DEBUG nuro] no hay una id proporcionada');
       return;
     }
 
-    const fetchReservation = async () => {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
 
-      console.log('[DEBUG nuro] intentando obtener reservación...');
-      try {
-        const reservacion = await api.getByID(id);
-        console.log('[DEBUG nuro] reservación obtenida:', reservacion);
-        setData(reservacion);
-      } catch (err) {
-        console.log('[DEBUG nuro] error en getReservation()');
-        console.error(err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReservation();
-  }, [id]);
-
-  return { id, data, loading, error };
+    console.log('[DEBUG nuro] intentando obtener reservación...');
+    try {
+      const reservacion = await api.getByID(id);
+      console.log('[DEBUG nuro] reservación obtenida:', reservacion);
+      setData(reservacion);
+      return reservacion;
+    } catch (err) {
+      console.log('[DEBUG nuro] error en getReservation()');
+      console.error(err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+  return { getReservationById, data, loading, error };
 }
 
 // 🔹 DELETE RESERVATION
-export function useDeleteReservation(id) {
+export function useDeleteReservation() {
   const [deleted, setDeleted] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (!id) return;
+  async function deleteReservationById(id) {
+    if (!id) {
+      console.log('[DEBUG nuro] no hay una id proporcionada');
+      return;
+    }
+    setLoading(true);
+    try {
+      console.log('[DEBUG nuro] eliminando reserva con id:', id);
+      const result = await api.borrar(id);
+      console.log('[DEBUG nuro] reserva eliminada:', result);
+      setDeleted(result);
+    } catch (err) {
+      console.log('[DEBUG nuro] error en deleteReservation()');
+      console.error(err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    const deleteReservation = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        console.log('[DEBUG nuro] eliminando reserva con id:', id);
-        const result = await api.borrar(id);
-        console.log('[DEBUG nuro] reserva eliminada:', result);
-        setDeleted(result);
-      } catch (err) {
-        console.log('[DEBUG nuro] error en deleteReservation()');
-        console.error(err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    deleteReservation();
-  }, [id]);
-
-  return { id, deleted, loading, error };
+  return { deleteReservationById, deleted, loading, error };
 }
 
 // 🔹 POST (CREAR NUEVA RESERVA)
@@ -81,7 +71,7 @@ export function useDeleteReservation(id) {
 //   ]
 // }
 
-export function usePostReservation(reservation) {
+export function usePostReservation() {
   const [id, setId] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -98,7 +88,7 @@ export function usePostReservation(reservation) {
     try {
       const dato = await api.post(reservation);
       setData(dato);
-      return data;
+      return dato;
     } catch (err) {
       console.log('Error en usePostReservation');
       setError(err);
