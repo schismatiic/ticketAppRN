@@ -3,23 +3,21 @@ const api = process.env.EXPO_PUBLIC_API_URL;
 async function postReservation(newReservation) {
   try {
     const response = await fetch(`${api}/reservations`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newReservation),
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Error en POST de reservation. Status: ${response.status}`,
-      );
+      throw new Error(`Error en POST de reservation. Status: ${response.status}`);
     }
 
     const result = await response.json();
-    console.log("[DEBUG]: Reserva creada correctamente:", result);
+    console.log('[DEBUG]: Reserva creada correctamente:', result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: error en postReservation() de reservations.js");
-    console.error(err.message);
+    console.log('[DEBUG]: error en postReservation() de reservations.js');
+    console.error(err);
     return null;
   }
 }
@@ -29,16 +27,14 @@ async function getReservation(id) {
   try {
     const response = await fetch(`${api}/reservations/${id}`);
     if (!response.ok) {
-      throw new Error(
-        `Error en GET de reservation. Status: ${response.status}`,
-      );
+      throw new Error(`Error en GET de reservation. Status: ${response.status}`);
     }
 
     const result = await response.json();
-    console.log("[DEBUG]: Reserva obtenida:", result);
+    console.log('[DEBUG]: Reserva obtenida:', result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: error en getReservation() de reservations.js");
+    console.log('[DEBUG]: error en getReservation() de reservations.js');
     console.error(err.message);
     return null;
   }
@@ -48,20 +44,18 @@ async function getReservation(id) {
 async function deleteReservation(id) {
   try {
     const response = await fetch(`${api}/reservations/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Error en DELETE de reservation. Status: ${response.status}`,
-      );
+      throw new Error(`Error en DELETE de reservation. Status: ${response.status}`);
     }
 
     const result = await response.json();
-    console.log("[DEBUG]: Reserva eliminada:", result);
+    console.log('[DEBUG]: Reserva eliminada:', result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: error en deleteReservation() de reservations.js");
+    console.log('[DEBUG]: error en deleteReservation() de reservations.js');
     console.error(err.message);
     return null;
   }
