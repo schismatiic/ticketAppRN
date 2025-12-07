@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useEffect, useMemo } from 'react';
 import { usePostReservation } from '../src/useHooks/useReservations';
 import { useTheme } from '../ThemeContext';
-
+import { Checkout } from 'components/Chekout';
 export default function EventDetail() {
   const { theme } = useTheme();
   const { _id, name, category, location, date, image, tickets } = useLocalSearchParams();
@@ -13,7 +13,8 @@ export default function EventDetail() {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cantidades, setCantidades] = useState(Array(ticketsParseados.length).fill(0));
-  const { post } = usePostReservation();
+  const [reservacionActual, setReservacionActual] = useState(null);
+  const { post, data, loading, error } = usePostReservation();
 
   const potencialReserva = useMemo(
     () => ({
@@ -34,6 +35,25 @@ export default function EventDetail() {
 
   const decrementar = (index) => {
     setCantidades((prev) => prev.map((q, i) => (i === index ? Math.max(q - 1, 0) : q)));
+  };
+
+  const handleReservation = async () => {
+    // 1. VALIDACIÓN PRIMERO (¡Muy bien hecho mover esto arriba!)
+    if (potencialReserva.items.length === 0) {
+      alert('No has elegido tickets');
+      return;
+    }
+
+    try {
+      const resultado = await post(potencialReserva);
+      if (resultado) {
+        setReservacionActual(resultado); // Guardamos el ID para el Checkout
+        setIsModalVisible(true); // AHORA sí abrimos el modal
+      }
+    } catch (err) {
+      console.warn(err); // Para que tú veas el error en consola
+      alert('Error al crear reserva: ' + (err.message || 'Intenta de nuevo'));
+    }
   };
 
   const styles = getStyles(theme);
@@ -76,26 +96,13 @@ export default function EventDetail() {
           </View>
         ))}
       </View>
-      <Pressable
-        style={styles.reservationButton}
-        onPress={async () => {
-          try {
-            await post(potencialReserva);
-            alert('Reserva exitosa!');
-            setIsModalVisible(true);
-          } catch (err) {
-            alert('Error al crear reserva');
-          }
-        }}>
+      <Pressable style={styles.reservationButton} onPress={handleReservation}>
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
       <Modal transparent visible={isModalVisible} animationType="slide">
         <View style={styles.modalBackground}>
           <View style={styles.bottomSheet}>
-            <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>ALOALO</Text>
-            <Pressable style={styles.addButton} onPress={() => setIsModalVisible(false)}>
-              <Text style={styles.buttonText}>desmostrar</Text>
-            </Pressable>
+            <Checkout reservationID={reservacionActual} onClose={setIsModalVisible} />
           </View>
         </View>
       </Modal>

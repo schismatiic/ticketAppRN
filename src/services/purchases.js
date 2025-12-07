@@ -1,19 +1,20 @@
 const api = process.env.EXPO_PUBLIC_API_URL;
 async function checkout(purchase) {
   try {
-    const response = await fetch(api + "/purchases", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch(api + '/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(purchase),
     });
     if (!response.ok) {
-      throw new Error(`Error en post de purchase. Status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.detail || `Error status: ${response.status}`);
     }
     const result = await response.json();
     console.log(result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: error en checkout() de purchases.js"); //Estoy haciendo los errores lo mas parecidos a los del benja para tener consistencia nya
+    console.log('[DEBUG]: error en checkout() de purchases.js'); //Estoy haciendo los errores lo mas parecidos a los del benja para tener consistencia nya
     console.error(err.message);
     return err;
   }
@@ -29,7 +30,7 @@ async function compra(id) {
     console.log(result);
     return result;
   } catch (err) {
-    console.log("[DEBUG]: error en purchase() de purchases.js");
+    console.log('[DEBUG]: error en purchase() de purchases.js');
     console.error(err.message);
     return err;
   }
