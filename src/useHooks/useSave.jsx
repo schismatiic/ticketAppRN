@@ -1,19 +1,26 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function useSave(value) {
-  // guardamos la id en el objeto "key"
   useEffect(() => {
     const storeData = async () => {
       try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem('key', jsonValue);
+        // leer el json previo
+        const stored = await AsyncStorage.getItem('key');
+        const arr = stored ? JSON.parse(stored) : [];
+
+        // agregamos value
+        arr.push(value);
+
+        // guarda el objeto completo
+        await AsyncStorage.setItem('key', JSON.stringify(arr));
       } catch (e) {
-        // saving error
+        // Saving error
       }
     };
+
     if (value) {
-      storeData(value);
+      storeData();
     }
   }, [value]);
 }
