@@ -49,13 +49,13 @@ export default function EventCard({ _id, name, category, location, date, image, 
 
         <LinearGradient // Horizontal
           colors={[theme === 'light' ? '#dbdbdb' : '#1e1e1e', 'transparent']}
-          locations={[0.1, 0.65]} // porcentaje que ocupara la gradiente
+          locations={[0, 0.6]} // porcentaje que ocupara la gradiente
           start={{ x: 1, y: 0.5 }} // start from right
           end={{ x: 0, y: 0.5 }} // fade to left
           style={styles.leftGradient}
         />
       </View>
-      <Text style={styles.eventTitle} numberOfLines={1} ellipsizeMode="tail">
+      <Text style={styles.eventTitle} numberOfLines={2} ellipsizeMode="tail">
         {title}
       </Text>
       <View style={styles.eventText}>
@@ -137,14 +137,14 @@ const getStyles = (theme) =>
       flexShrink: 1,
       width: '100%',
       position: 'absolute',
-      fontSize: 17,
+      fontSize: 18,
       fontWeight: 'bold',
       paddingLeft: 8,
       paddingRight: 8,
       paddingBottom: 1,
       paddingTop: 1,
       color: theme === 'light' ? '#000' : '#fff',
-      backgroundColor: theme === 'light' ? 'rgba(219, 219, 219, 0.5)' : 'rgba(30, 30, 30, 0.5)',
+      backgroundColor: theme === 'light' ? 'rgba(219, 219, 219, 0.4)' : 'rgba(30, 30, 30, 0.33)',
     },
     imageWrapper: {
       position: 'relative',
