@@ -15,7 +15,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: textColor,
+        tabBarActiveTintColor: '#ff0066',
         tabBarStyle: {
           backgroundColor: tabBg,
           borderTopColor: isLight ? '#ddd' : '#333',
@@ -30,7 +30,7 @@ export default function TabLayout() {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <FontAwesome name="ticket" size={24} color={textColor} />
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: textColor }}>
-              Ticket<Text style={{ color: 'red' }}>App</Text>
+              Ticket<Text style={{ color: '#ff0066' }}>App</Text>
             </Text>
           </View>
         ),
@@ -40,6 +40,14 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: 'History',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="history" color={color} />,
         }}
       />
 

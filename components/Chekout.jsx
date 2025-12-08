@@ -10,6 +10,7 @@ import {
 import React, { useState } from 'react';
 import { useCheckout } from '../src/useHooks/usePurchases.jsx';
 import { useTheme } from '../ThemeContext';
+import useSave from '@/useHooks/useSave.jsx';
 
 export function Checkout({ reservationID, onClose }) {
   const { theme } = useTheme();
@@ -18,7 +19,7 @@ export function Checkout({ reservationID, onClose }) {
   const [name, setName] = useState('');
   const [correo, setCorreo] = useState('');
 
-  const { checkout, loading } = useCheckout();
+  const { checkout, data, loading } = useCheckout();
 
   // Datos seguros
   const _id = reservationID?.reservation_id || 'Cargando...';
@@ -48,8 +49,8 @@ export function Checkout({ reservationID, onClose }) {
     } catch (e) {
       // El hook ya maneja el error, pero por si acaso
     }
-  };
-
+  }; // Andres qliao dice ayer no si hoy trabajo, no hace nada el larry
+  useSave(data?._id); // si hay un id de compra lo guardamos
   const salir = () => {
     setIsModalVisible(false);
   };
