@@ -5,14 +5,40 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 function CustomHeader() {
   const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const textColor = isLight ? 'black' : 'white';
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-      <FontAwesome name="ticket" size={24} color={theme === 'light' ? 'black' : 'white'} />
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <FontAwesome name="ticket" size={24} color={textColor} style={{ marginRight: 5 }} />
+
       <Text
-        style={{ fontSize: 20, fontWeight: 'bold', color: theme === 'light' ? 'black' : 'white' }}>
-        Ticket<Text style={{ color: 'red' }}>App</Text>
+        style={{
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: textColor,
+        }}>
+        Ticket
       </Text>
+
+      <View
+        style={{
+          backgroundColor: 'orange',
+          borderRadius: 3,
+          paddingHorizontal: 4,
+          paddingVertical: 0.1,
+          marginLeft: 1,
+        }}>
+        <Text
+          style={{
+            backgroundColor: 'orange',
+            color: 'black',
+            fontWeight: 'bold',
+            fontSize: 20,
+          }}>
+          hub
+        </Text>
+      </View>
     </View>
   );
 }

@@ -131,7 +131,7 @@ const getStyles = (theme) =>
     },
     eventTitle: {
       borderTopWidth: height / 256,
-      borderTopColor: '#ff0066',
+      borderTopColor: 'orange',
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10,
       flexShrink: 1,
@@ -168,6 +168,6 @@ const getStyles = (theme) =>
       width: '85%',
     },
     icon: {
-      color: '#ff0066',
+      color: 'orange',
     },
   });
