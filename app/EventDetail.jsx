@@ -65,15 +65,26 @@ export default function EventDetail() {
       <Text style={styles.title}>{name}</Text>
       <View style={styles.categoryContainer}>
         <MaterialIcons name="music-note" size={17} color={theme === 'light' ? 'black' : 'white'} />
-        <Text style={styles.text}>{category}</Text>
+        <Text style={styles.text}>
+          <Text style={{ fontWeight: 800 }}>Categoría: </Text>
+          {category}
+        </Text>
       </View>
       <View style={styles.categoryContainer}>
         <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
-        <Text style={styles.text}>{location}</Text>
+        <Text style={styles.text}>
+          {' '}
+          <Text style={{ fontWeight: 800 }}>Lugar: </Text>
+          {location}
+        </Text>
       </View>
       <View style={styles.categoryContainer}>
         <MaterialIcons name="event" size={17} color={theme === 'light' ? 'black' : 'white'} />
-        <Text style={styles.text}>{fechaFormateada}</Text>
+        <Text style={styles.text}>
+          {' '}
+          <Text style={{ fontWeight: 800 }}>Fecha: </Text>
+          {fechaFormateada}
+        </Text>
       </View>
       <View style={styles.ticketInfo}>
         {ticketsParseados.map((ticket, i) => (
@@ -152,8 +163,8 @@ const getStyles = (theme) =>
     categoryContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 6,
-      marginVertical: 4,
+      gap: 2,
+      marginVertical: 1,
       opacity: 0.9,
     },
 
@@ -162,7 +173,7 @@ const getStyles = (theme) =>
       backgroundColor: theme === 'light' ? '#FFFFFF' : '#111111',
       borderRadius: 16,
       padding: 20,
-      marginTop: 20,
+      marginTop: 15,
       shadowColor: '#000',
       shadowOpacity: 0.08,
       shadowRadius: 8,
@@ -175,7 +186,7 @@ const getStyles = (theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingVertical: 10,
+      paddingVertical: 5,
     },
 
     divider: {
