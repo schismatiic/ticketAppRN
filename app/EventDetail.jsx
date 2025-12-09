@@ -38,7 +38,6 @@ export default function EventDetail() {
   };
 
   const handleReservation = async () => {
-    // 1. VALIDACIÓN PRIMERO (¡Muy bien hecho mover esto arriba!)
     if (potencialReserva.items.length === 0) {
       alert('No has elegido tickets');
       return;
@@ -60,7 +59,9 @@ export default function EventDetail() {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: image }} style={styles.image} />
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: image }} style={styles.image} />
+      </View>
       <Text style={styles.title}>{name}</Text>
       <View style={styles.categoryContainer}>
         <MaterialIcons name="music-note" size={17} color={theme === 'light' ? 'black' : 'white'} />
@@ -80,19 +81,24 @@ export default function EventDetail() {
             <View style={styles.ticketIndv}>
               <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>{ticket.type}</Text>
               <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>
-                ¡Quedan {ticketsParseados[i].available}!
+                Stock: {ticket.available}
               </Text>
-              <Text>
+              <View style={styles.addButtonContainer}>
                 <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
                   <Text style={styles.buttonText}>-</Text>
                 </Pressable>
-                {cantidades[i]}
+
+                <Text style={{ color: theme === 'light' ? '#000' : '#FFF', marginHorizontal: 8 }}>
+                  {cantidades[i]}
+                </Text>
+
                 <Pressable style={styles.addButton} onPress={() => incrementar(i)}>
                   <Text style={styles.buttonText}>+</Text>
                 </Pressable>
-              </Text>
+              </View>
             </View>
-            <View style={styles.divider} />
+
+            {ticket.type && i < ticketsParseados.length - 1 && <View style={styles.divider} />}
           </View>
         ))}
       </View>
@@ -112,52 +118,121 @@ export default function EventDetail() {
 
 const getStyles = (theme) =>
   StyleSheet.create({
-    container: { padding: 20, backgroundColor: theme === 'light' ? '#fff' : '#000', flex: 1 },
-    image: { width: '100%', height: 250, borderRadius: 10, backgroundColor: '#0000002d' },
-    title: {
-      fontSize: 25,
-      fontWeight: 'bold',
-      marginVertical: 15,
-      color: theme === 'light' ? '#000' : '#fff',
+    container: {
+      padding: 20,
+      backgroundColor: theme === 'light' ? '#F9F9F9' : '#0D0D0D',
+      flex: 1,
     },
-    text: { fontSize: 18, marginVertical: 4, color: theme === 'light' ? '#000' : '#fff' },
-    categoryContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+
+    image: {
+      width: '120%',
+      height: 260,
+      backgroundColor: '#00000015',
+    },
+
+    imageContainer: {
+      width: '100%',
+      marginHorizontal: -20,
+      marginTop: -20,
+    },
+
+    title: {
+      fontSize: 27,
+      fontWeight: '700',
+      color: theme === 'light' ? '#111' : '#EEE',
+      marginBottom: 10,
+      marginTop: 10,
+    },
+
+    text: {
+      fontSize: 16,
+      color: theme === 'light' ? '#333' : '#DDD',
+    },
+
+    categoryContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      marginVertical: 4,
+      opacity: 0.9,
+    },
+
     ticketInfo: {
       width: '100%',
-      backgroundColor: theme === 'light' ? '#fff' : '#1a1a1a',
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: theme === 'light' ? 'black' : 'white',
+      backgroundColor: theme === 'light' ? '#FFFFFF' : '#111111',
+      borderRadius: 16,
       padding: 20,
+      marginTop: 20,
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      elevation: 2,
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
     },
+
+    ticketIndv: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: 10,
+    },
+
     divider: {
       width: '100%',
       height: 1,
-      backgroundColor: theme === 'light' ? 'black' : 'white',
-      marginVertical: 8,
+      backgroundColor: theme === 'light' ? '#E0E0E0' : '#222',
+      marginVertical: 6,
     },
-    ticketIndv: { flexDirection: 'row', justifyContent: 'space-between' },
-    reservationButton: {
-      backgroundColor: 'black',
-      marginTop: 20,
-      borderRadius: 10,
-      padding: 10,
-      width: '25%',
+    addButtonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
+
     addButton: {
-      backgroundColor: 'black',
-      marginTop: 2,
-      borderRadius: 5,
-      padding: 1,
-      width: '25%',
+      backgroundColor: theme === 'light' ? '#1A1A1A' : '#FFF',
+      paddingHorizontal: 10,
+      paddingVertical: 3,
+      borderRadius: 6,
+      marginHorizontal: 1,
     },
-    buttonText: { color: 'white', textAlign: 'center' },
-    modalBackground: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.3)' },
+
+    buttonText: {
+      color: theme === 'light' ? '#FFF' : '#000',
+      fontWeight: '600',
+      textAlign: 'center',
+    },
+
+    reservationButton: {
+      backgroundColor: theme === 'light' ? '#111' : '#FFF',
+      marginTop: 25,
+      borderRadius: 14,
+      padding: 14,
+      width: '40%',
+      alignSelf: 'center',
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 3,
+      textAlign: 'center',
+    },
+
+    modalBackground: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      backgroundColor: 'rgba(0,0,0,0.35)',
+    },
+
     bottomSheet: {
       height: '75%',
-      backgroundColor: theme === 'light' ? '#fff' : '#1a1a1a',
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
+      backgroundColor: theme === 'light' ? '#FFFFFF' : '#111',
+      borderTopLeftRadius: 24,
+      borderTopRightRadius: 24,
       padding: 20,
+      shadowColor: '#000',
+      shadowOpacity: 0.15,
+      shadowRadius: 10,
+      elevation: 8,
     },
   });

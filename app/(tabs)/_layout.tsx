@@ -27,11 +27,35 @@ export default function TabLayout() {
         headerTitleAlign: 'center',
 
         headerTitle: () => (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <FontAwesome name="ticket" size={24} color={textColor} />
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: textColor }}>
-              Ticket<Text style={{ color: '#ff0066' }}>App</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <FontAwesome name="ticket" size={24} color={textColor} style={{ marginRight: 5 }} />
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: textColor,
+                alignItems: 'center',
+              }}>
+              Ticket
             </Text>
+            <View
+              style={{
+                backgroundColor: 'orange',
+                borderRadius: 3,
+                paddingHorizontal: 4,
+                paddingVertical: 0.1,
+                marginLeft: 1,
+              }}>
+              <Text
+                style={{
+                  backgroundColor: 'orange',
+                  color: 'black',
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                }}>
+                hub
+              </Text>
+            </View>
           </View>
         ),
       }}>
