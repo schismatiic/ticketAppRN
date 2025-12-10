@@ -49,7 +49,7 @@ function ThemedStack() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: theme === 'light' ? '#fff' : '#000' },
+        headerStyle: { backgroundColor: theme === 'light' ? '#fff' : '#111' },
         headerTitleAlign: 'center',
         headerTitle: () => <CustomHeader />,
       }}>

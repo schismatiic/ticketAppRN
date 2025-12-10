@@ -137,7 +137,7 @@ const getStyles = (theme) =>
       flexShrink: 1,
       width: '100%',
       position: 'absolute',
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: 'bold',
       paddingLeft: 8,
       paddingRight: 8,

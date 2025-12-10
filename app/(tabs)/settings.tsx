@@ -47,7 +47,7 @@ const getStyles = (theme: 'light' | 'dark') =>
     container: {
       flexGrow: 1,
       justifyContent: 'flex-start',
-      backgroundColor: theme === 'light' ? '#fff' : '#000',
+      backgroundColor: theme === 'light' ? '#fff' : '#000000e5',
       paddingTop: 20,
     },
 

@@ -131,14 +131,16 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       padding: 20,
-      backgroundColor: theme === 'light' ? '#F9F9F9' : '#0D0D0D',
+      backgroundColor: theme === 'light' ? '#F9F9F9' : '#000000e5',
       flex: 1,
     },
 
     image: {
       width: '120%',
       height: 260,
-      backgroundColor: '#00000015',
+      backgroundColor: '#0000004f',
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
     },
 
     imageContainer: {
