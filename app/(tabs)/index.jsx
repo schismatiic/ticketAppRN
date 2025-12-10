@@ -6,20 +6,20 @@ import {
   Image,
   Dimensions,
   FlatList,
+  Alert,
 } from 'react-native';
 import { useGetEvents } from '@/useHooks/useEvents';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import tuxGif from '../../assets/linux-tux.gif';
 import { SearchBar } from 'components/SearchBar';
 import { useTheme } from '../../ThemeContext';
-
 const height = Dimensions.get('window').height;
 const LazyCard = lazy(() =>
   import('../../components/EventCard').then((m) => ({ default: m.default }))
 );
 
 export default function Tab() {
-  const { getEvents, data, isLoading } = useGetEvents();
+  const { getEvents, data, isLoading, error } = useGetEvents();
   const [tux, setTux] = useState(null);
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(1);
@@ -32,6 +32,18 @@ export default function Tab() {
       getEvents({ page, limit: 10 });
     }
   }, [page]);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Ups, hubo un problema', error.message || 'No se pudieron cargar los eventos.', [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Reintentar',
+          onPress: () => getEvents({ page, limit: 10 }),
+        },
+      ]);
+    }
+  }, [error]);
 
   const loadEvents = () => {
     if (!isLoading) {

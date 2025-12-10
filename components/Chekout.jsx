@@ -27,27 +27,18 @@ export function Checkout({ reservationID, onClose }) {
   console.log('EL ID |' + _id + '|');
   // Formato de dinero chileno
   const precioFormateado = precio.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
-  const idReal = reservationID?.reservation_id || reservationID?._id;
 
-  // 1. IMPRIME EL LARGO (Esto no miente)
-  // Un ObjectId de Mongo estándar tiene 24 caracteres hexadecimales.
-  console.log(`Largo del ID: ${idReal.length}`);
-  console.log(`El ID es: >${idReal}<`); // Las flechas > < te mostrarán si hay espacios
-
-  // 2. PRUEBA DE FUEGO
-  if (idReal.length !== 24) {
-    console.error('¡ALERTA! El ID tiene basura. Debería medir 24.');
-  }
   const handlePagar = async () => {
     if (!name || !correo) return Alert.alert('Faltan datos', 'Completa nombre y correo');
 
     try {
-      // Tu lógica de pago
       await checkout({ reservation_id: _id, buyer: { name, email: correo } });
-      Alert.alert('¡Éxito!', 'Compra confirmada');
+      Alert.alert('¡Exito!', 'Compra confirmada');
       if (onClose) onClose();
     } catch (e) {
       // El hook ya maneja el error, pero por si acaso
+    } finally {
+      onClose(false);
     }
   }; // Andres qliao dice ayer no si hoy trabajo, no hace nada el larry
   useSave(data?._id); // si hay un id de compra lo guardamos
@@ -58,15 +49,6 @@ export function Checkout({ reservationID, onClose }) {
     <View style={styles.container}>
       {/* CABECERA */}
       <Text style={styles.title}>Confirmar Pago</Text>
-
-      {/* RESUMEN (Tarjeta gris) */}
-      <View style={styles.summaryCard}>
-        <View style={styles.row}>
-          <Text style={styles.labelSummary}>Total a pagar:</Text>
-          <Text style={styles.priceText}>{precioFormateado}</Text>
-        </View>
-        <Text style={styles.idText}>ID Reserva: {_id}</Text>
-      </View>
 
       {/* FORMULARIO */}
       <View style={styles.form}>
@@ -93,6 +75,14 @@ export function Checkout({ reservationID, onClose }) {
             autoCapitalize="none"
           />
         </View>
+      </View>
+      {/* RESUMEN (Tarjeta gris) */}
+      <View style={styles.summaryCard}>
+        <View style={styles.row}>
+          <Text style={styles.labelSummary}>Total a pagar:</Text>
+          <Text style={styles.priceText}>{precioFormateado}</Text>
+        </View>
+        <Text style={styles.idText}>ID Reserva: {_id}</Text>
       </View>
 
       {/* BOTONES */}
