@@ -20,6 +20,8 @@ export function SearchBar({ onSearch, setEvents }) {
         style={styles.input}
         placeholder="Buscar eventos..."
         placeholderTextColor={theme === 'light' ? '#666' : '#aaa'}
+        returnKeyType="search"
+        onSubmitEditing={handledata}
         value={data}
         onChangeText={setData}
       />
