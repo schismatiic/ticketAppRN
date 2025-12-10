@@ -99,7 +99,16 @@ export default function EventDetail() {
                   <Text style={styles.buttonText}>-</Text>
                 </Pressable>
 
-                <Text style={{ color: theme === 'light' ? '#000' : '#FFF', marginHorizontal: 8 }}>
+                <Text
+                  style={{
+                    color: theme === 'light' ? '#000' : '#FFF',
+                    marginHorizontal: 8,
+                    borderWidth: 1,
+                    borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+                    borderRadius: 4,
+                    paddingHorizontal: 10,
+                    paddingVertical: 3,
+                  }}>
                   {cantidades[i]}
                 </Text>
 
@@ -222,7 +231,7 @@ const getStyles = (theme) =>
       marginTop: 25,
       borderRadius: 14,
       padding: 14,
-      width: '40%',
+      width: '100%',
       alignSelf: 'center',
       shadowColor: '#000',
       shadowOpacity: 0.1,

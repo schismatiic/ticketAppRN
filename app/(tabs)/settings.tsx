@@ -11,11 +11,11 @@ export default function SettingsScreen() {
   const items = [
     {
       id: 1,
-      label: `Cambiar a ${theme === 'light' ? 'Oscuro' : 'Claro'}`,
+      label: `Cambiar a ${theme === 'light' ? 'oscuro' : 'claro'}`,
       action: toggleTheme,
       icon: 'brightness-6',
     },
-    { id: 2, label: 'Limpiar Historial', action: clear, icon: 'delete' },
+    { id: 2, label: 'Limpiar historial', action: clear, icon: 'delete' },
   ];
 
   return (

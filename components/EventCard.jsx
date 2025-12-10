@@ -101,6 +101,11 @@ const getStyles = (theme) =>
       width: '90%',
       height: height / 5,
       backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
     },
     categoryContainer: {
       flexDirection: 'row',
