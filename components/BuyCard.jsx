@@ -17,6 +17,7 @@ import { usePurchase } from '@/useHooks/usePurchases';
 import { useGetbyId } from '@/useHooks/useEvents';
 // queria usar eventcard para esto pero lo complicaria mucho asi que es mas facil crear un componente nuevo
 const height = Dimensions.get('window').height;
+import noPicture from '../assets/noPicture.png';
 
 export default function BuyCard({ _id }) {
   const [modal, setModal] = useState(false);
@@ -135,7 +136,14 @@ export default function BuyCard({ _id }) {
                 </Text>
               </View>
 
-              <Image style={styles.image} source={{ uri: edata.image }} />
+              <Image
+                style={styles.image}
+                source={
+                  edata.image === '' || edata.image.includes('placehold')
+                    ? noPicture
+                    : { uri: edata.image }
+                }
+              />
               <View style={styles.receiptContainer}>
                 <View style={styles.rerow}>
                   <MaterialIcons name="numbers" size={17} color={styles.text.color} />
