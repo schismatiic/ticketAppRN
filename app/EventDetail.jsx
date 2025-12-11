@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, Modal, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Modal, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useMemo } from 'react';
@@ -78,101 +78,103 @@ export default function EventDetail() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.scrollArea}>
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: image }} style={styles.image} />
-        </View>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
+        <View style={styles.scrollArea}>
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: image }} style={styles.image} />
+          </View>
 
-        <Text style={styles.title}>{name}</Text>
+          <Text style={styles.title}>{name}</Text>
 
-        <View style={styles.categoryContainer}>
-          <MaterialIcons
-            name="music-note"
-            size={17}
-            color={theme === 'light' ? 'black' : 'white'}
-          />
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: 800 }}>Categoría: </Text>
-            {category}
-          </Text>
-        </View>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons
+              name="music-note"
+              size={17}
+              color={theme === 'light' ? 'black' : 'white'}
+            />
+            <Text style={styles.text}>
+              <Text style={{ fontWeight: 800 }}>Categoría: </Text>
+              {category}
+            </Text>
+          </View>
 
-        <View style={styles.categoryContainer}>
-          <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: 800 }}>Lugar: </Text>
-            {location}
-          </Text>
-        </View>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
+            <Text style={styles.text}>
+              <Text style={{ fontWeight: 800 }}>Lugar: </Text>
+              {location}
+            </Text>
+          </View>
 
-        <View style={styles.categoryContainer}>
-          <MaterialIcons name="event" size={17} color={theme === 'light' ? 'black' : 'white'} />
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: 800 }}>Fecha: </Text>
-            {fechaFormateada}
-          </Text>
-        </View>
+          <View style={styles.categoryContainer}>
+            <MaterialIcons name="event" size={17} color={theme === 'light' ? 'black' : 'white'} />
+            <Text style={styles.text}>
+              <Text style={{ fontWeight: 800 }}>Fecha: </Text>
+              {fechaFormateada}
+            </Text>
+          </View>
 
-        <View style={styles.ticketInfo}>
-          {ticketsParseados.map((ticket, i) => (
-            <View key={i}>
-              <View style={styles.ticketIndv}>
-                <MaterialIcons
-                  name="confirmation-number"
-                  size={20}
-                  color={getTicketColor(cantidades[i])}
-                />
+          <View style={styles.ticketInfo}>
+            {ticketsParseados.map((ticket, i) => (
+              <View key={i}>
+                <View style={styles.ticketIndv}>
+                  <MaterialIcons
+                    name="confirmation-number"
+                    size={20}
+                    color={getTicketColor(cantidades[i])}
+                  />
 
-                <View style={{ flex: 1, marginLeft: 8 }}>
-                  <Text
-                    style={{
-                      color: theme === 'light' ? '#111' : '#fff',
-                      fontSize: 15,
-                      fontWeight: '600',
-                    }}>
-                    {ticket.type}
-                  </Text>
+                  <View style={{ flex: 1, marginLeft: 8 }}>
+                    <Text
+                      style={{
+                        color: theme === 'light' ? '#111' : '#fff',
+                        fontSize: 15,
+                        fontWeight: '600',
+                      }}>
+                      {ticket.type}
+                    </Text>
 
-                  <Text
-                    style={{
-                      color: theme === 'light' ? '#777' : '#bbbbbb',
-                      fontSize: 12,
-                      marginTop: 2,
-                    }}>
-                    Stock: {ticket.available}
-                  </Text>
+                    <Text
+                      style={{
+                        color: theme === 'light' ? '#777' : '#bbbbbb',
+                        fontSize: 12,
+                        marginTop: 2,
+                      }}>
+                      Stock: {ticket.available}
+                    </Text>
+                  </View>
+
+                  <View style={styles.addButtonContainer}>
+                    <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
+                      <Text style={styles.buttonText}>-</Text>
+                    </Pressable>
+
+                    <Text
+                      style={{
+                        color: theme === 'light' ? '#000' : '#FFF',
+                        marginHorizontal: 8,
+                        borderWidth: 1,
+                        borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+                        borderRadius: 4,
+                        paddingHorizontal: 10,
+                        paddingVertical: 3,
+                      }}>
+                      {cantidades[i]}
+                    </Text>
+
+                    <Pressable style={styles.addButton} onPress={() => incrementar(i)}>
+                      <Text style={styles.buttonText}>+</Text>
+                    </Pressable>
+                  </View>
                 </View>
 
-                <View style={styles.addButtonContainer}>
-                  <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
-                    <Text style={styles.buttonText}>-</Text>
-                  </Pressable>
-
-                  <Text
-                    style={{
-                      color: theme === 'light' ? '#000' : '#FFF',
-                      marginHorizontal: 8,
-                      borderWidth: 1,
-                      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
-                      borderRadius: 4,
-                      paddingHorizontal: 10,
-                      paddingVertical: 3,
-                    }}>
-                    {cantidades[i]}
-                  </Text>
-
-                  <Pressable style={styles.addButton} onPress={() => incrementar(i)}>
-                    <Text style={styles.buttonText}>+</Text>
-                  </Pressable>
-                </View>
+                {ticket.type && i < ticketsParseados.length - 1 && <View style={styles.divider} />}
               </View>
-
-              {ticket.type && i < ticketsParseados.length - 1 && <View style={styles.divider} />}
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
 
       <Pressable style={styles.fixedButton} onPress={handleReservation}>
         <Text style={styles.buttonText}>Reservar</Text>
@@ -195,6 +197,12 @@ const getStyles = (theme) =>
       padding: 20,
       backgroundColor: theme === 'light' ? '#f9f9f9ff' : '#000000e5',
       flex: 1,
+      marginBottom: 100,
+    },
+
+    scrollArea: {
+      flex: 1,
+      paddingBottom: 120,
     },
 
     scrollArea: {
