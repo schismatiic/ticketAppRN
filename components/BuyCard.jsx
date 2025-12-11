@@ -17,6 +17,7 @@ import { usePurchase } from '@/useHooks/usePurchases';
 import { useGetbyId } from '@/useHooks/useEvents';
 // queria usar eventcard para esto pero lo complicaria mucho asi que es mas facil crear un componente nuevo
 const height = Dimensions.get('window').height;
+import noPicture from '../assets/noPicture.png';
 
 export default function BuyCard({ _id }) {
   const [modal, setModal] = useState(false);
@@ -134,8 +135,15 @@ export default function BuyCard({ _id }) {
                   Detalles de compra
                 </Text>
               </View>
-              <Text style={styles.title}>{title}</Text>
-              <Image style={styles.image} source={{ uri: edata.image }} />
+
+              <Image
+                style={styles.image}
+                source={
+                  edata.image === '' || edata.image.includes('placehold')
+                    ? noPicture
+                    : { uri: edata.image }
+                }
+              />
               <View style={styles.receiptContainer}>
                 <View style={styles.rerow}>
                   <MaterialIcons name="numbers" size={17} color={styles.text.color} />
@@ -187,9 +195,16 @@ const getStyles = (theme) =>
       margin: 12,
       borderRadius: 10,
       width: '90%',
-      height: height / 6,
-      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+      height: height / 5,
       justifyContent: 'space-between',
+      backgroundColor: theme === 'light' ? '#fff' : '#222222e5',
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      elevation: 2,
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#e5e5e5' : '#222222ff',
+      padding: 10,
     },
     row: {
       flexDirection: 'row',
@@ -202,10 +217,9 @@ const getStyles = (theme) =>
     },
     id_text: { color: theme === 'light' ? '#000' : '#fff', paddingTop: 8, fontSize: 17 },
     price_container: {
-      borderWidth: 1,
-      borderColor: theme === 'light' ? '#000' : '#fff',
       marginBottom: 8,
-      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#E5E5E5' : '#353535ff',
       marginLeft: 'auto',
       marginTop: 'auto',
       paddingHorizontal: 16,

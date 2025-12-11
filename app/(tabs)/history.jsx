@@ -2,11 +2,19 @@ import { View, Text, FlatList, StyleSheet, ScrollView, Modal } from 'react-nativ
 import useLoad from '@/useHooks/useLoad';
 import { useTheme } from '../../ThemeContext';
 import BuyCard from 'components/BuyCard';
+import { useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 export default function History() {
   const { theme } = useTheme();
-  const data = useLoad();
+  const { data, getData } = useLoad();
   const styles = getStyles(theme);
+  // cargamos los datos cada vez que se abre la tab
+  useFocusEffect(
+    useCallback(() => {
+      getData(); // ⬅️ se ejecuta cada vez que vuelves a la tab
+    }, [])
+  );
 
   console.log(data);
   return (
@@ -20,6 +28,6 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme === 'light' ? '#fff' : '#000',
+      backgroundColor: theme === 'light' ? '#fff' : '#000000e5',
     },
   });
