@@ -5,6 +5,7 @@ import React, { useState, useMemo } from 'react';
 import { usePostReservation } from '../src/useHooks/useReservations';
 import { useTheme } from '../ThemeContext';
 import { Checkout } from 'components/Chekout';
+import noPicture from '../assets/noPicture.png';
 
 export default function EventDetail() {
   const { theme } = useTheme();
@@ -68,7 +69,7 @@ export default function EventDetail() {
       <ScrollView style={styles.container}>
         <View style={styles.scrollArea}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: image }} style={styles.image} />
+            <Image source={image === '' || image.includes("placehold") ? noPicture : { uri: image }} style={styles.image} />
           </View>
 
           <Text style={styles.title}>{name}</Text>

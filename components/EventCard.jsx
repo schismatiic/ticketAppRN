@@ -29,7 +29,7 @@ export default function EventCard({ _id, name, category, location, date, image, 
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(' ');
 
-    setPicture(image === '' ? noPicture : { uri: image });
+    setPicture(image === '' || image.includes("placehold") ? noPicture : { uri: image });
     setTitle(toTitle(name));
     setLoc(toTitle(location));
     setCat(toTitle(category));
