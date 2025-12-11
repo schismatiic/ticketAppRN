@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, Modal, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Modal, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useMemo } from 'react';
@@ -37,10 +37,7 @@ export default function EventDetail() {
             return q + 1;
           } else {
             console.log('Maximo');
-            Alert.alert(
-              'Maximo de boletos alcanzados',
-              `Solo quedan ${ticketsParseados[i].available} boletos tickets disponibles`
-            );
+            Alert.alert('Maximo de boletos alcanzados', `No hay boletos disponibles`);
             return q;
           }
         }
