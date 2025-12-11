@@ -1,10 +1,11 @@
 import { View, Text, Image, StyleSheet, Pressable, Modal } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { usePostReservation } from '../src/useHooks/useReservations';
 import { useTheme } from '../ThemeContext';
 import { Checkout } from 'components/Chekout';
+
 export default function EventDetail() {
   const { theme } = useTheme();
   const { _id, name, category, location, date, image, tickets } = useLocalSearchParams();
@@ -14,7 +15,7 @@ export default function EventDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cantidades, setCantidades] = useState(Array(ticketsParseados.length).fill(0));
   const [reservacionActual, setReservacionActual] = useState(null);
-  const { post, data, loading, error } = usePostReservation();
+  const { post } = usePostReservation();
 
   const potencialReserva = useMemo(
     () => ({
@@ -42,89 +43,112 @@ export default function EventDetail() {
       alert('No has elegido tickets');
       return;
     }
-
     try {
       const resultado = await post(potencialReserva);
       if (resultado) {
-        setReservacionActual(resultado); // Guardamos el ID para el Checkout
-        setIsModalVisible(true); // AHORA sí abrimos el modal
+        setReservacionActual(resultado);
+        setIsModalVisible(true);
       }
     } catch (err) {
-      console.warn(err); // Para que tú veas el error en consola
-      alert('Error al crear reserva: ' + (err.message || 'Intenta de nuevo'));
+      alert('Error al crear reserva');
     }
   };
 
   const styles = getStyles(theme);
 
+  const getTicketColor = (cantidad) => {
+    if (cantidad === 0) return theme === 'light' ? '#999' : '#555';
+    if (cantidad <= 2) return '#4caf50ff';
+    if (cantidad <= 4) return '#ffc107ff';
+    return '#ff5252ff';
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: image }} style={styles.image} />
-      </View>
-      <Text style={styles.title}>{name}</Text>
-      <View style={styles.categoryContainer}>
-        <MaterialIcons name="music-note" size={17} color={theme === 'light' ? 'black' : 'white'} />
-        <Text style={styles.text}>
-          <Text style={{ fontWeight: 800 }}>Categoría: </Text>
-          {category}
-        </Text>
-      </View>
-      <View style={styles.categoryContainer}>
-        <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
-        <Text style={styles.text}>
-          {' '}
-          <Text style={{ fontWeight: 800 }}>Lugar: </Text>
-          {location}
-        </Text>
-      </View>
-      <View style={styles.categoryContainer}>
-        <MaterialIcons name="event" size={17} color={theme === 'light' ? 'black' : 'white'} />
-        <Text style={styles.text}>
-          {' '}
-          <Text style={{ fontWeight: 800 }}>Fecha: </Text>
-          {fechaFormateada}
-        </Text>
-      </View>
-      <View style={styles.ticketInfo}>
-        {ticketsParseados.map((ticket, i) => (
-          <View key={i}>
-            <View style={styles.ticketIndv}>
-              <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>{ticket.type}</Text>
-              <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>
-                Stock: {ticket.available}
-              </Text>
-              <View style={styles.addButtonContainer}>
-                <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
-                  <Text style={styles.buttonText}>-</Text>
-                </Pressable>
+      <View style={styles.scrollArea}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+        </View>
 
-                <Text
-                  style={{
-                    color: theme === 'light' ? '#000' : '#FFF',
-                    marginHorizontal: 8,
-                    borderWidth: 1,
-                    borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
-                    borderRadius: 4,
-                    paddingHorizontal: 10,
-                    paddingVertical: 3,
-                  }}>
-                  {cantidades[i]}
+        <Text style={styles.title}>{name}</Text>
+
+        <View style={styles.categoryContainer}>
+          <MaterialIcons
+            name="music-note"
+            size={17}
+            color={theme === 'light' ? 'black' : 'white'}
+          />
+          <Text style={styles.text}>
+            <Text style={{ fontWeight: 800 }}>Categoría: </Text>
+            {category}
+          </Text>
+        </View>
+
+        <View style={styles.categoryContainer}>
+          <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
+          <Text style={styles.text}>
+            <Text style={{ fontWeight: 800 }}>Lugar: </Text>
+            {location}
+          </Text>
+        </View>
+
+        <View style={styles.categoryContainer}>
+          <MaterialIcons name="event" size={17} color={theme === 'light' ? 'black' : 'white'} />
+          <Text style={styles.text}>
+            <Text style={{ fontWeight: 800 }}>Fecha: </Text>
+            {fechaFormateada}
+          </Text>
+        </View>
+
+        <View style={styles.ticketInfo}>
+          {ticketsParseados.map((ticket, i) => (
+            <View key={i}>
+              <View style={styles.ticketIndv}>
+                <MaterialIcons
+                  name="confirmation-number"
+                  size={20}
+                  color={getTicketColor(cantidades[i])}
+                />
+
+                <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>{ticket.type}</Text>
+                <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>
+                  Stock: {ticket.available}
                 </Text>
 
-                <Pressable style={styles.addButton} onPress={() => incrementar(i)}>
-                  <Text style={styles.buttonText}>+</Text>
-                </Pressable>
-              </View>
-            </View>
+                <View style={styles.addButtonContainer}>
+                  <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
+                    <Text style={styles.buttonText}>-</Text>
+                  </Pressable>
 
-            {ticket.type && i < ticketsParseados.length - 1 && <View style={styles.divider} />}
-          </View>
-        ))}
+                  <Text
+                    style={{
+                      color: theme === 'light' ? '#000' : '#FFF',
+                      marginHorizontal: 8,
+                      borderWidth: 1,
+                      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+                      borderRadius: 4,
+                      paddingHorizontal: 10,
+                      paddingVertical: 3,
+                    }}>
+                    {cantidades[i]}
+                  </Text>
+
+                  <Pressable style={styles.addButton} onPress={() => incrementar(i)}>
+                    <Text style={styles.buttonText}>+</Text>
+                  </Pressable>
+                </View>
+              </View>
+
+              {ticket.type && i < ticketsParseados.length - 1 && <View style={styles.divider} />}
+            </View>
+          ))}
+        </View>
       </View>
-      <Pressable style={styles.reservationButton} onPress={handleReservation}>
+
+      <Pressable style={styles.fixedButton} onPress={handleReservation}>
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
+
       <Modal transparent visible={isModalVisible} animationType="slide">
         <View style={styles.modalBackground}>
           <View style={styles.bottomSheet}>
@@ -140,8 +164,13 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       padding: 20,
-      backgroundColor: theme === 'light' ? '#F9F9F9' : '#000000e5',
+      backgroundColor: theme === 'light' ? '#f9f9f9ff' : '#000000e5',
       flex: 1,
+    },
+
+    scrollArea: {
+      flex: 1,
+      paddingBottom: 120,
     },
 
     image: {
@@ -149,7 +178,7 @@ const getStyles = (theme) =>
       height: 260,
       backgroundColor: '#0000004f',
       borderWidth: 1,
-      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+      borderColor: theme === 'light' ? '#e9e9e9ff' : '#222222',
     },
 
     imageContainer: {
@@ -161,14 +190,14 @@ const getStyles = (theme) =>
     title: {
       fontSize: 27,
       fontWeight: '700',
-      color: theme === 'light' ? '#111' : '#EEE',
+      color: theme === 'light' ? '#111' : '#eeeeeeff',
       marginBottom: 10,
       marginTop: 10,
     },
 
     text: {
       fontSize: 16,
-      color: theme === 'light' ? '#333' : '#DDD',
+      color: theme === 'light' ? '#333' : '#ddddddff',
     },
 
     categoryContainer: {
@@ -181,7 +210,7 @@ const getStyles = (theme) =>
 
     ticketInfo: {
       width: '100%',
-      backgroundColor: theme === 'light' ? '#FFFFFF' : '#111111',
+      backgroundColor: theme === 'light' ? '#ffffffff' : '#111111',
       borderRadius: 16,
       padding: 20,
       marginTop: 15,
@@ -190,7 +219,7 @@ const getStyles = (theme) =>
       shadowRadius: 8,
       elevation: 2,
       borderWidth: 1,
-      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+      borderColor: theme === 'light' ? '#e5e5e5' : '#222222',
     },
 
     ticketIndv: {
@@ -203,9 +232,10 @@ const getStyles = (theme) =>
     divider: {
       width: '100%',
       height: 1,
-      backgroundColor: theme === 'light' ? '#E0E0E0' : '#222',
+      backgroundColor: theme === 'light' ? '#e0e0e0ff' : '#222',
       marginVertical: 6,
     },
+
     addButtonContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -213,7 +243,7 @@ const getStyles = (theme) =>
     },
 
     addButton: {
-      backgroundColor: theme === 'light' ? '#1A1A1A' : '#FFF',
+      backgroundColor: theme === 'light' ? '#1a1a1aff' : '#ffffffff',
       paddingHorizontal: 10,
       paddingVertical: 3,
       borderRadius: 6,
@@ -221,23 +251,25 @@ const getStyles = (theme) =>
     },
 
     buttonText: {
-      color: theme === 'light' ? '#FFF' : '#000',
+      color: theme === 'light' ? '#ffffffff' : '#000',
       fontWeight: '600',
       textAlign: 'center',
     },
 
-    reservationButton: {
-      backgroundColor: theme === 'light' ? '#111' : '#FFF',
-      marginTop: 25,
+    fixedButton: {
+      position: 'absolute',
+      bottom: 50,
+      left: 20,
+      right: 20,
+      backgroundColor: theme === 'light' ? '#111' : '#ffffffff',
+      padding: 16,
       borderRadius: 14,
-      padding: 14,
-      width: '100%',
-      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
       shadowColor: '#000',
-      shadowOpacity: 0.1,
+      shadowOpacity: 0.15,
       shadowRadius: 6,
-      elevation: 3,
-      textAlign: 'center',
+      elevation: 6,
     },
 
     modalBackground: {
@@ -248,7 +280,7 @@ const getStyles = (theme) =>
 
     bottomSheet: {
       height: '75%',
-      backgroundColor: theme === 'light' ? '#FFFFFF' : '#111',
+      backgroundColor: theme === 'light' ? '#ffffffff' : '#111',
       borderTopLeftRadius: 24,
       borderTopRightRadius: 24,
       padding: 20,
