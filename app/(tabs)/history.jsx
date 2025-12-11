@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, Modal } from 'react-native';
 import useLoad from '@/useHooks/useLoad';
 import { useTheme } from '../../ThemeContext';
 import BuyCard from 'components/BuyCard';
