@@ -290,6 +290,7 @@ const getStyles = (theme) =>
     },
     rightContent: {
       fontWeight: 300,
+      color: theme === 'light' ? '#111' : '#eeeeeeff',
     },
     rerow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     tickets: {
@@ -307,6 +308,6 @@ const getStyles = (theme) =>
 
       backgroundColor: theme === 'light' ? '#ffffffff' : '#111111',
     },
-    ticketText: { fontSize: 17, padding: 4, color: theme === 'light' ? '#111' : '#eeeeeeff' },
+    ticketText: { fontSize: 16, padding: 4, color: theme === 'light' ? '#111' : '#eeeeeeff' },
     right: { flexDirection: 'row', alignItems: 'center' },
   });
