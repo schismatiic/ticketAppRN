@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, Modal } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Modal, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useEffect, useMemo } from 'react';
@@ -28,11 +28,25 @@ export default function EventDetail() {
     }),
     [cantidades, ticketsParseados]
   );
-
   const incrementar = (index) => {
-    setCantidades((prev) => prev.map((q, i) => (i === index ? q + 1 : q)));
+    setCantidades((prev) =>
+      prev.map((q, i) => {
+        if (i === index) {
+          if (q < ticketsParseados[i].available) {
+            return q + 1;
+          } else {
+            console.log('Maximo');
+            Alert.alert(
+              'Maximo de boletos alcanzados',
+              `Solo quedan ${ticketsParseados[i].available} boletos tickets disponibles`
+            );
+            return q;
+          }
+        }
+        return q;
+      })
+    );
   };
-
   const decrementar = (index) => {
     setCantidades((prev) => prev.map((q, i) => (i === index ? Math.max(q - 1, 0) : q)));
   };
@@ -94,6 +108,7 @@ export default function EventDetail() {
               <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>
                 Stock: {ticket.available}
               </Text>
+
               <View style={styles.addButtonContainer}>
                 <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
                   <Text style={styles.buttonText}>-</Text>
