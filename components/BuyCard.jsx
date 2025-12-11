@@ -131,6 +131,7 @@ export default function BuyCard({ _id }) {
                     fontWeight: 'bold',
                     padding: 12,
                     textAlign: 'center',
+                    color: theme === 'light' ? '#111' : '#eeeeeeff',
                   }}>
                   Detalles de compra
                 </Text>
@@ -146,25 +147,43 @@ export default function BuyCard({ _id }) {
               />
               <View style={styles.receiptContainer}>
                 <View style={styles.rerow}>
-                  <MaterialIcons name="numbers" size={17} color={styles.text.color} />
-                  <Text style={styles.receiptText}>ID: {_id}</Text>
+                  <View style={styles.right}>
+                    <MaterialIcons name="numbers" size={17} color={styles.text.color} />
+                    <Text style={styles.receiptText}>ID:</Text>
+                  </View>
+
+                  <Text style={styles.rightContent}>{_id}</Text>
                 </View>
                 <View style={styles.rerow}>
-                  <MaterialIcons name="person" size={17} color={styles.text.color} />
-                  <Text style={styles.receiptText}>Comprador: {data.buyer.name}</Text>
+                  <View style={styles.right}>
+                    <MaterialIcons name="person" size={17} color={styles.text.color} />
+                    <Text style={styles.receiptText}>Comprador: </Text>
+                  </View>
+
+                  <Text style={styles.rightContent}>{data.buyer.name}</Text>
                 </View>
                 <View style={styles.rerow}>
-                  <MaterialIcons name="email" size={17} color={styles.text.color} />
-                  <Text style={styles.receiptText}>Mail: {data.buyer.email}</Text>
+                  <View style={styles.right}>
+                    <MaterialIcons name="email" size={17} color={styles.text.color} />
+                    <Text style={styles.receiptText}>Mail:</Text>
+                  </View>
+
+                  <Text style={styles.rightContent}>{data.buyer.email}</Text>
                 </View>
                 <View style={styles.rerow}>
-                  <FontAwesome name="calendar-o" size={17} color={styles.text.color} />
-                  <Text style={styles.receiptText}>Fecha: {fecha}</Text>
+                  <View style={styles.right}>
+                    <FontAwesome name="calendar-o" size={17} color={styles.text.color} />
+                    <Text style={styles.receiptText}>Fecha:</Text>
+                  </View>
+
+                  <Text style={styles.rightContent}>{fecha}</Text>
                 </View>
                 <View style={styles.tickets}>
                   <View style={styles.rerow}>
-                    <FontAwesome name="ticket" size={17} color={styles.text.color} />
-                    <Text style={styles.receiptText}>Tickets: </Text>
+                    <View style={styles.right}>
+                      <FontAwesome name="ticket" size={17} color={styles.text.color} />
+                      <Text style={styles.receiptText}>Tickets: </Text>
+                    </View>
                   </View>
                   {ticks.map((item, index) => (
                     <Text key={index} style={styles.ticketText}>
@@ -210,10 +229,10 @@ const getStyles = (theme) =>
       flexDirection: 'row',
     },
     text: {
-      color: theme === 'light' ? '#000' : '#fff',
       fontSize: 20,
       fontWeight: 'bold',
       justifyContent: 'center',
+      color: theme === 'light' ? '#111' : '#eeeeeeff',
     },
     id_text: { color: theme === 'light' ? '#000' : '#fff', paddingTop: 8, fontSize: 17 },
     price_container: {
@@ -225,6 +244,9 @@ const getStyles = (theme) =>
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderRadius: 8,
+      marginTop: 10,
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
     },
     fechas: {
       color: theme === 'light' ? '#000' : '#fff',
@@ -250,7 +272,6 @@ const getStyles = (theme) =>
       alignItems: 'center',
       width: '100%',
       height: height / 4.5,
-      borderRadius: 12,
       margin: 4,
       backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
     },
@@ -261,8 +282,32 @@ const getStyles = (theme) =>
       padding: 4,
     },
     receiptContainer: { alignContent: 'center', justifyContentL: 'center' },
-    receiptText: { fontSize: 17, padding: 4 },
-    rerow: { flexDirection: 'row', alignItems: 'center' },
-    tickets: { borderWidth: 1, margin: 4, borderRadius: 10, padding: 6 },
-    ticketText: { fontSize: 17, padding: 4, borderBottomWidth: 1 },
+    receiptText: {
+      fontSize: 16,
+      padding: 4,
+      color: theme === 'light' ? '#111' : '#eeeeeeff',
+      fontWeight: 700,
+    },
+    rightContent: {
+      fontWeight: 300,
+      color: theme === 'light' ? '#111' : '#eeeeeeff',
+    },
+    rerow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+    tickets: {
+      borderWidth: 1,
+      borderRadius: 10,
+      padding: 6,
+      padding: 16,
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#e5e5e5' : '#222222',
+      marginTop: 10,
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      elevation: 2,
+
+      backgroundColor: theme === 'light' ? '#ffffffff' : '#111111',
+    },
+    ticketText: { fontSize: 16, padding: 4, color: theme === 'light' ? '#111' : '#eeeeeeff' },
+    right: { flexDirection: 'row', alignItems: 'center' },
   });

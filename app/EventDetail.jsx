@@ -158,7 +158,14 @@ export default function EventDetail() {
                       }}>
                       {ticket.type}
                     </Text>
-
+                    <Text
+                      style={{
+                        color: theme === 'light' ? '#777' : '#bbbbbb',
+                        fontSize: 12,
+                        marginTop: 2,
+                      }}>
+                      Precio: ${ticket.price}
+                    </Text>
                     <Text
                       style={{
                         color: theme === 'light' ? '#777' : '#bbbbbb',
@@ -182,7 +189,8 @@ export default function EventDetail() {
                         borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
                         borderRadius: 4,
                         paddingHorizontal: 10,
-                        paddingVertical: 3,
+                        paddingVertical: 9,
+                        fontSize: 16,
                       }}>
                       {cantidades[i]}
                     </Text>
@@ -204,7 +212,11 @@ export default function EventDetail() {
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
 
-      <Modal transparent visible={isModalVisible} animationType="slide">
+      <Modal
+        transparent
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide">
         <View style={styles.modalBackground}>
           <View style={styles.bottomSheet}>
             <Checkout reservationID={reservacionActual} onClose={setIsModalVisible} />
@@ -304,8 +316,8 @@ const getStyles = (theme) =>
 
     addButton: {
       backgroundColor: theme === 'light' ? '#1a1a1aff' : '#ffffffff',
-      paddingHorizontal: 10,
-      paddingVertical: 3,
+      paddingHorizontal: 18,
+      paddingVertical: 10,
       borderRadius: 6,
       marginHorizontal: 1,
     },
@@ -314,6 +326,7 @@ const getStyles = (theme) =>
       color: theme === 'light' ? '#ffffffff' : '#000',
       fontWeight: '600',
       textAlign: 'center',
+      fontSize: 16,
     },
 
     fixedButton: {
