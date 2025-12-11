@@ -99,8 +99,8 @@ export default function EventDetail() {
   }; // tremendo yandere dev
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
+    <View style={{ flex: 1, backgroundColor: theme === 'light' ? '#f9f9f9' : '#000000e5' }}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.scrollArea}>
           <View style={styles.imageContainer}>
             <Image
@@ -219,7 +219,6 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       padding: 20,
-      backgroundColor: theme === 'light' ? '#f9f9f9ff' : '#000000e5',
       flex: 1,
       marginBottom: 100,
     },
