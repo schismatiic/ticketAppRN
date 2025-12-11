@@ -31,13 +31,22 @@ export function Checkout({ reservationID, onClose }) {
 
   const handlePagar = async () => {
     if (!name || !correo) return Alert.alert('Faltan datos', 'Completa nombre y correo');
-
     try {
-      await checkout({ reservation_id: _id, buyer: { name, email: correo } });
+      const result = await checkout({ reservation_id: _id, buyer: { name, email: correo } });
+      console.log(`[DEBUG]: en checkout.jsx el result: ${result} `);
+      console.log(`[DEBUG]: Data del hook`, data);
+
+      if (result?._id) {
+        await save(result._id);
+        console.log('[DEBUG]:  Guardado en AsyncStorage:', result._id);
+      } else {
+        console.log('[DEBUG]:  No hay _id para guardar');
+      }
+
       Alert.alert('¡Exito!', 'Compra confirmada');
       if (onClose) onClose();
     } catch (e) {
-      // El hook ya maneja el error, pero por si acaso
+      console.log('[DEBUG]: Checkout.jsx');
     } finally {
       onClose(false);
     }
