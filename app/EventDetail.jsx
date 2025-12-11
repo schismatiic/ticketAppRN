@@ -311,8 +311,8 @@ const getStyles = (theme) =>
 
     addButton: {
       backgroundColor: theme === 'light' ? '#1a1a1aff' : '#ffffffff',
-      paddingHorizontal: 10,
-      paddingVertical: 3,
+      paddingHorizontal: 18,
+      paddingVertical: 10,
       borderRadius: 6,
       marginHorizontal: 1,
     },
@@ -321,6 +321,7 @@ const getStyles = (theme) =>
       color: theme === 'light' ? '#ffffffff' : '#000',
       fontWeight: '600',
       textAlign: 'center',
+      fontSize: 18,
     },
 
     fixedButton: {
