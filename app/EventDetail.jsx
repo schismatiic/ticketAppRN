@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, Pressable, Modal, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { usePostReservation } from '../src/useHooks/useReservations';
 import { useTheme } from '../ThemeContext';
 import { Checkout } from 'components/Checkout';
@@ -17,6 +17,23 @@ export default function EventDetail() {
   const [cantidades, setCantidades] = useState(Array(ticketsParseados.length).fill(0));
   const [reservacionActual, setReservacionActual] = useState(null);
   const { post } = usePostReservation();
+  const [title, setTitle] = useState('');
+  const [cat, setCat] = useState('');
+  const [loc, setLoc] = useState('');
+
+  useEffect(() => {
+    const toTitle = (str) =>
+      str
+        .toLowerCase()
+        .trim()
+        .split(/\s+/)
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+
+    setTitle(toTitle(name));
+    setLoc(toTitle(location));
+    setCat(toTitle(category));
+  }, [name, location, category]);
 
   const potencialReserva = useMemo(
     () => ({
@@ -79,7 +96,7 @@ export default function EventDetail() {
     if (cantidad <= 64) return '#ff0707f1';
 
     return '#ff5252ff';
-  };
+  }; // tremendo yandere dev
 
   return (
     <View style={{ flex: 1 }}>
@@ -92,7 +109,7 @@ export default function EventDetail() {
             />
           </View>
 
-          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.title}>{title}</Text>
 
           <View style={styles.categoryContainer}>
             <MaterialIcons
@@ -102,7 +119,7 @@ export default function EventDetail() {
             />
             <Text style={styles.text}>
               <Text style={{ fontWeight: 800 }}>Categoría: </Text>
-              {category}
+              {cat}
             </Text>
           </View>
 
@@ -110,7 +127,7 @@ export default function EventDetail() {
             <MaterialIcons name="place" size={17} color={theme === 'light' ? 'black' : 'white'} />
             <Text style={styles.text}>
               <Text style={{ fontWeight: 800 }}>Lugar: </Text>
-              {location}
+              {loc}
             </Text>
           </View>
 
