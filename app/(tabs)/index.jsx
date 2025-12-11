@@ -31,8 +31,8 @@ export default function Tab() {
   const onRefresh = async () => {
     setRefreshing(true);
 
-    setEvents([]);       // borra los eventos
-    setPage(1);          // vuelve a la primera página
+    setEvents([]); // borra los eventos
+    setPage(1); // vuelve a la primera página
 
     await getEvents({ page: 1, limit: 10 });
 
@@ -88,7 +88,6 @@ export default function Tab() {
         onEndReached={loadEvents}
         onEndReachedThreshold={0.2}
         contentContainerStyle={styles.content}
-
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -96,7 +95,6 @@ export default function Tab() {
             tintColor={theme === 'light' ? '#000' : '#fff'}
           />
         }
-
         renderItem={({ item }) => (
           <Suspense>
             <LazyCard

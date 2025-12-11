@@ -11,13 +11,14 @@ import React, { useState } from 'react';
 import { useCheckout } from '../src/useHooks/usePurchases.jsx';
 import { useTheme } from '../ThemeContext';
 import useSave from '@/useHooks/useSave.jsx';
-
+import Countdown from './Countdown.jsx';
 export function Checkout({ reservationID, onClose }) {
   const { theme } = useTheme();
   const styles = getStyles(theme);
 
   const [name, setName] = useState('');
   const [correo, setCorreo] = useState('');
+  const [expirado, setExpirado] = useState(false);
 
   const { checkout, data, loading } = useCheckout();
 
@@ -84,14 +85,17 @@ export function Checkout({ reservationID, onClose }) {
         </View>
         <Text style={styles.idText}>ID Reserva: {_id}</Text>
       </View>
-
+      <Countdown expiresAt={reservationID?.expiresAt} onFinish={() => setExpirado(true)} />
       {/* BOTONES */}
       <View style={styles.footer}>
-        <Pressable style={styles.btnPay} onPress={handlePagar} disabled={loading}>
+        <Pressable
+          style={styles.btnPay}
+          onPress={expirado ? null : handlePagar}
+          disabled={expirado || loading}>
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text style={styles.txtPay}>Pagar Ahora</Text>
+            <Text style={styles.txtPay}>{expirado ? 'Tiempo agotado' : 'Pagar ahora'}</Text>
           )}
         </Pressable>
 
