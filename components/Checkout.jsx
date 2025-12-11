@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useCheckout } from '../src/useHooks/usePurchases.jsx';
-import { useTheme } from '../ThemeContext.js';
+import { useTheme } from '../ThemeContext';
 import useSave from '@/useHooks/useSave.jsx';
 import Countdown from './Countdown.jsx';
 export function Checkout({ reservationID, onClose }) {
@@ -30,15 +30,23 @@ export function Checkout({ reservationID, onClose }) {
   const precioFormateado = precio.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 
   const handlePagar = async () => {
-    if (!name || !correo)
-      return Alert.alert('Datos faltantes', 'Por favor, complete los campos de nombre y correo');
-
+    if (!name || !correo) return Alert.alert('Faltan datos', 'Completa nombre y correo');
     try {
-      await checkout({ reservation_id: _id, buyer: { name, email: correo } });
+      const result = await checkout({ reservation_id: _id, buyer: { name, email: correo } });
+      console.log(`[DEBUG]: en checkout.jsx el result: ${result} `);
+      console.log(`[DEBUG]: Data del hook`, data);
+
+      if (result?._id) {
+        await save(result._id);
+        console.log('[DEBUG]:  Guardado en AsyncStorage:', result._id);
+      } else {
+        console.log('[DEBUG]:  No hay _id para guardar');
+      }
+
       Alert.alert('¡Exito!', 'Compra confirmada');
       if (onClose) onClose();
     } catch (e) {
-      // El hook ya maneja el error, pero por si acaso
+      console.log('[DEBUG]: Checkout.jsx');
     } finally {
       onClose(false);
     }
@@ -49,12 +57,12 @@ export function Checkout({ reservationID, onClose }) {
   return (
     <View style={styles.container}>
       {/* CABECERA */}
-      <Text style={styles.title}>Confirmar pago</Text>
+      <Text style={styles.title}>Confirmar Pago</Text>
 
       {/* FORMULARIO */}
       <View style={styles.form}>
         <View>
-          <Text style={styles.labelInput}>Nombre completo</Text>
+          <Text style={styles.labelInput}>Nombre Completo</Text>
           <TextInput
             style={styles.input}
             placeholder="Ej: Juan Pérez"
@@ -65,7 +73,7 @@ export function Checkout({ reservationID, onClose }) {
         </View>
 
         <View>
-          <Text style={styles.labelInput}>Correo electrónico</Text>
+          <Text style={styles.labelInput}>Correo Electrónico</Text>
           <TextInput
             style={styles.input}
             placeholder="Ej: juan@email.com"
