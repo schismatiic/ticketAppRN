@@ -11,6 +11,7 @@ import {
   Image,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
 import { usePurchase } from '@/useHooks/usePurchases';
 import { useGetbyId } from '@/useHooks/useEvents';
@@ -108,17 +109,16 @@ export default function BuyCard({ _id }) {
               backgroundColor: 'rgba(0,0,0,0.5)', // <--- oscuridad
               justifyContent: 'flex-end',
             }}>
-            <View style={{ height: '33%' }}></View>
             <ScrollView
               style={{
                 marginTop: 'auto',
                 backgroundColor: theme === 'light' ? '#fff' : '#222',
                 padding: 20,
-                borderRadius: 10,
+                borderRadius: 12,
                 width: '100%',
                 height: height / 1.5,
               }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1 }}>
                 <Pressable onPress={() => setModal(false)}>
                   <View style={styles.backIcon}>
                     <MaterialIcons name="arrow-back" size={30} color={styles.text.color} />
@@ -136,19 +136,37 @@ export default function BuyCard({ _id }) {
               </View>
               <Text style={styles.title}>{title}</Text>
               <Image style={styles.image} source={{ uri: edata.image }} />
-              <View>
-                <Text>ID: {_id}</Text>
-                <Text>Comprador: {data.buyer.name}</Text>
-                <Text>eMail: {data.buyer.email}</Text>
-                <Text>Fecha: {fecha}</Text>
-                <Text>Tickets: </Text>
-                {ticks.map((item, index) => (
-                  <Text key={index}>
-                    {item.code} - {item.type}
-                  </Text>
-                ))}
-
-                <Text>Total: ${data.total_price}</Text>
+              <View style={styles.receiptContainer}>
+                <View style={styles.rerow}>
+                  <MaterialIcons name="numbers" size={17} color={styles.text.color} />
+                  <Text style={styles.receiptText}>ID: {_id}</Text>
+                </View>
+                <View style={styles.rerow}>
+                  <MaterialIcons name="person" size={17} color={styles.text.color} />
+                  <Text style={styles.receiptText}>Comprador: {data.buyer.name}</Text>
+                </View>
+                <View style={styles.rerow}>
+                  <MaterialIcons name="email" size={17} color={styles.text.color} />
+                  <Text style={styles.receiptText}>Mail: {data.buyer.email}</Text>
+                </View>
+                <View style={styles.rerow}>
+                  <FontAwesome name="calendar-o" size={17} color={styles.text.color} />
+                  <Text style={styles.receiptText}>Fecha: {fecha}</Text>
+                </View>
+                <View style={styles.tickets}>
+                  <View style={styles.rerow}>
+                    <FontAwesome name="ticket" size={17} color={styles.text.color} />
+                    <Text style={styles.receiptText}>Tickets: </Text>
+                  </View>
+                  {ticks.map((item, index) => (
+                    <Text key={index} style={styles.ticketText}>
+                      {item.code} - {item.type}
+                    </Text>
+                  ))}
+                </View>
+                <View style={styles.price_container}>
+                  <Text style={styles.text}>Total: ${data.total_price}</Text>
+                </View>
               </View>
             </ScrollView>
           </View>
@@ -184,8 +202,10 @@ const getStyles = (theme) =>
     },
     id_text: { color: theme === 'light' ? '#000' : '#fff', paddingTop: 8, fontSize: 17 },
     price_container: {
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#000' : '#fff',
       marginBottom: 8,
-      backgroundColor: theme === 'light' ? '#cacaca' : '#2e2e2e',
+      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
       marginLeft: 'auto',
       marginTop: 'auto',
       paddingHorizontal: 16,
@@ -218,10 +238,17 @@ const getStyles = (theme) =>
       height: height / 4.5,
       borderRadius: 12,
       margin: 4,
+      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
     },
     title: {
       fontSize: 18,
       fontWeight: 'bold',
       textAlign: 'center',
+      padding: 4,
     },
+    receiptContainer: { alignContent: 'center', justifyContentL: 'center' },
+    receiptText: { fontSize: 17, padding: 4 },
+    rerow: { flexDirection: 'row', alignItems: 'center' },
+    tickets: { borderWidth: 1, margin: 4, borderRadius: 10, padding: 6 },
+    ticketText: { fontSize: 17, padding: 4, borderBottomWidth: 1 },
   });
