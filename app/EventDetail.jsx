@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Pressable, Modal, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable, Modal, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useMemo } from 'react';
@@ -30,11 +30,22 @@ export default function EventDetail() {
     }),
     [cantidades, ticketsParseados]
   );
-
   const incrementar = (index) => {
-    setCantidades((prev) => prev.map((q, i) => (i === index ? q + 1 : q)));
+    setCantidades((prev) =>
+      prev.map((q, i) => {
+        if (i === index) {
+          if (q < ticketsParseados[i].available) {
+            return q + 1;
+          } else {
+            console.log('Maximo');
+            Alert.alert('Maximo de boletos alcanzados', `No hay boletos disponibles`);
+            return q;
+          }
+        }
+        return q;
+      })
+    );
   };
-
   const decrementar = (index) => {
     setCantidades((prev) => prev.map((q, i) => (i === index ? Math.max(q - 1, 0) : q)));
   };
@@ -185,6 +196,11 @@ const getStyles = (theme) =>
       backgroundColor: theme === 'light' ? '#f9f9f9ff' : '#000000e5',
       flex: 1,
       marginBottom: 100,
+    },
+
+    scrollArea: {
+      flex: 1,
+      paddingBottom: 120,
     },
 
     scrollArea: {
