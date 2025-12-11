@@ -211,7 +211,11 @@ export default function EventDetail() {
         <Text style={styles.buttonText}>Reservar</Text>
       </Pressable>
 
-      <Modal transparent visible={isModalVisible} animationType="slide">
+      <Modal
+        transparent
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide">
         <View style={styles.modalBackground}>
           <View style={styles.bottomSheet}>
             <Checkout reservationID={reservacionActual} onClose={setIsModalVisible} />
