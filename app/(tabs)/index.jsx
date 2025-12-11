@@ -13,6 +13,8 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import tuxGif from '../../assets/linux-tux.gif';
 import { SearchBar } from 'components/SearchBar';
 import { useTheme } from '../../ThemeContext';
+import { RefreshControl } from 'react-native';
+
 const height = Dimensions.get('window').height;
 const LazyCard = lazy(() =>
   import('../../components/EventCard').then((m) => ({ default: m.default }))
@@ -24,6 +26,18 @@ export default function Tab() {
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(1);
   const { theme } = useTheme();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    setEvents([]);       // borra los eventos
+    setPage(1);          // vuelve a la primera página
+
+    await getEvents({ page: 1, limit: 10 });
+
+    setRefreshing(false);
+  };
 
   const styles = getStyles(theme);
 
@@ -74,6 +88,15 @@ export default function Tab() {
         onEndReached={loadEvents}
         onEndReachedThreshold={0.2}
         contentContainerStyle={styles.content}
+
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme === 'light' ? '#000' : '#fff'}
+          />
+        }
+
         renderItem={({ item }) => (
           <Suspense>
             <LazyCard
