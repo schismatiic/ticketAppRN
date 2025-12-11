@@ -8,6 +8,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Modal,
+  Image,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../ThemeContext';
@@ -59,6 +60,8 @@ export default function BuyCard({ _id }) {
   }, [edata]);
 
   if (data && edata) {
+    const ticks = data.tickets;
+
     return (
       <>
         <Pressable style={styles.container} onPress={() => setModal(true)}>
@@ -93,6 +96,7 @@ export default function BuyCard({ _id }) {
             </View>
           </View>
         </Pressable>
+
         <Modal
           visible={modal}
           animationType="slide"
@@ -100,20 +104,53 @@ export default function BuyCard({ _id }) {
           onRequestClose={() => setModal(false)}>
           <View
             style={{
-              marginTop: 'auto',
-              backgroundColor: theme === 'light' ? '#fff' : '#222',
-              padding: 20,
-              borderRadius: 10,
-              width: '100%',
-              height: height / 1.5,
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.5)', // <--- oscuridad
+              justifyContent: 'flex-end',
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
-              Detalles de compra
-            </Text>
+            <View style={{ height: '33%' }}></View>
+            <ScrollView
+              style={{
+                marginTop: 'auto',
+                backgroundColor: theme === 'light' ? '#fff' : '#222',
+                padding: 20,
+                borderRadius: 10,
+                width: '100%',
+                height: height / 1.5,
+              }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Pressable onPress={() => setModal(false)}>
+                  <View style={styles.backIcon}>
+                    <MaterialIcons name="arrow-back" size={30} color={styles.text.color} />
+                  </View>
+                </Pressable>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    padding: 12,
+                    textAlign: 'center',
+                  }}>
+                  Detalles de compra
+                </Text>
+              </View>
+              <Text style={styles.title}>{title}</Text>
+              <Image style={styles.image} source={{ uri: edata.image }} />
+              <View>
+                <Text>ID: {_id}</Text>
+                <Text>Comprador: {data.buyer.name}</Text>
+                <Text>eMail: {data.buyer.email}</Text>
+                <Text>Fecha: {fecha}</Text>
+                <Text>Tickets: </Text>
+                {ticks.map((item, index) => (
+                  <Text key={index}>
+                    {item.code} - {item.type}
+                  </Text>
+                ))}
 
-            <Text>ID: {_id}</Text>
-            <Text>Fecha: {fecha}</Text>
-            <Text>Total: ${data.total_price}</Text>
+                <Text>Total: ${data.total_price}</Text>
+              </View>
+            </ScrollView>
           </View>
         </Modal>
       </>
@@ -165,5 +202,26 @@ const getStyles = (theme) =>
       paddingRight: 8,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    backIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: 9999,
+      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    image: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: height / 4.5,
+      borderRadius: 12,
+      margin: 4,
+    },
+    title: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
   });
