@@ -23,21 +23,22 @@ export default function SettingsScreen() {
       <View style={styles.headerWrapper}>
         <Text style={styles.header}>Configuración</Text>
       </View>
-
-      {items.map((item, idx) => (
-        <Pressable
-          key={item.id}
-          style={[styles.listItem, idx === items.length - 1 && styles.lastItem]}
-          onPress={item.action}>
-          <MaterialIcons
-            name={item.icon}
-            size={24}
-            color={theme === 'light' ? 'black' : 'white'}
-            style={styles.icon}
-          />
-          <Text style={styles.listText}>{item.label}</Text>
-        </Pressable>
-      ))}
+      <View style={styles.itemContainer}>
+        {items.map((item, idx) => (
+          <Pressable
+            key={item.id}
+            style={[styles.listItem, idx === items.length - 1 && styles.lastItem]}
+            onPress={item.action}>
+            <MaterialIcons
+              name={item.icon}
+              size={24}
+              color={theme === 'light' ? 'black' : 'white'}
+              style={styles.icon}
+            />
+            <Text style={styles.listText}>{item.label}</Text>
+          </Pressable>
+        ))}
+      </View>
     </ScrollView>
   );
 }
@@ -47,6 +48,7 @@ const getStyles = (theme: 'light' | 'dark') =>
     container: {
       flexGrow: 1,
       justifyContent: 'flex-start',
+      alignItems: 'center',
       backgroundColor: theme === 'light' ? '#fff' : '#000000e5',
       paddingTop: 20,
     },
@@ -68,7 +70,7 @@ const getStyles = (theme: 'light' | 'dark') =>
       width: '100%',
       paddingVertical: 16,
       paddingHorizontal: 20,
-      borderBottomWidth: 1,
+      borderBottomWidth: 0.5,
       borderBottomColor: theme === 'light' ? '#ccc' : '#444',
       flexDirection: 'row',
       alignItems: 'center',
@@ -83,5 +85,15 @@ const getStyles = (theme: 'light' | 'dark') =>
     },
     icon: {
       marginRight: 10,
+    },
+    itemContainer: {
+      backgroundColor: theme === 'light' ? '#dbdbdb' : '#1e1e1e',
+      borderWidth: 1,
+      borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      borderRadius: 10,
+      width: '90%',
     },
   });
