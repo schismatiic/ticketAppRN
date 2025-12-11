@@ -30,9 +30,20 @@ export function Checkout({ reservationID, onClose }) {
   const precioFormateado = precio.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 
   const handlePagar = async () => {
-    if (!name || !correo) return Alert.alert('Faltan datos', 'Completa nombre y correo');
+    const correLimpio = correo.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name.trim() || !correLimpio)
+      return Alert.alert('Faltan datos', 'Completa nombre y correo');
+
+    if (!emailRegex.test(correLimpio)) {
+      return Alert.alert('Correo no valido', 'Ingresa una direccion correcta (ejemplo@correo.com)');
+    }
     try {
-      const result = await checkout({ reservation_id: _id, buyer: { name, email: correo } });
+      const result = await checkout({
+        reservation_id: _id,
+        buyer: { name: name.trim(), email: correLimpio },
+      });
       console.log(`[DEBUG]: en checkout.jsx el result: ${result} `);
       console.log(`[DEBUG]: Data del hook`, data);
 
@@ -47,6 +58,7 @@ export function Checkout({ reservationID, onClose }) {
       if (onClose) onClose();
     } catch (e) {
       console.log('[DEBUG]: Checkout.jsx');
+      Alert.alert('Error', 'No se pudo procesar el pago. Intenta nuevamente.');
     } finally {
       onClose(false);
     }
@@ -57,12 +69,12 @@ export function Checkout({ reservationID, onClose }) {
   return (
     <View style={styles.container}>
       {/* CABECERA */}
-      <Text style={styles.title}>Confirmar Pago</Text>
+      <Text style={styles.title}>Confirmar pago</Text>
 
       {/* FORMULARIO */}
       <View style={styles.form}>
         <View>
-          <Text style={styles.labelInput}>Nombre Completo</Text>
+          <Text style={styles.labelInput}>Nombre completo</Text>
           <TextInput
             style={styles.input}
             placeholder="Ej: Juan Pérez"
@@ -73,7 +85,7 @@ export function Checkout({ reservationID, onClose }) {
         </View>
 
         <View>
-          <Text style={styles.labelInput}>Correo Electrónico</Text>
+          <Text style={styles.labelInput}>Correo electrónico</Text>
           <TextInput
             style={styles.input}
             placeholder="Ej: juan@email.com"
