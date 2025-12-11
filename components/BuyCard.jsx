@@ -180,8 +180,10 @@ export default function BuyCard({ _id }) {
                 </View>
                 <View style={styles.tickets}>
                   <View style={styles.rerow}>
-                    <FontAwesome name="ticket" size={17} color={styles.text.color} />
-                    <Text style={styles.receiptText}>Tickets: </Text>
+                    <View style={styles.right}>
+                      <FontAwesome name="ticket" size={17} color={styles.text.color} />
+                      <Text style={styles.receiptText}>Tickets: </Text>
+                    </View>
                   </View>
                   {ticks.map((item, index) => (
                     <Text key={index} style={styles.ticketText}>
