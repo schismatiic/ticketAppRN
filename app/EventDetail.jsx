@@ -110,10 +110,25 @@ export default function EventDetail() {
                   color={getTicketColor(cantidades[i])}
                 />
 
-                <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>{ticket.type}</Text>
-                <Text style={{ color: theme === 'light' ? 'black' : 'white' }}>
-                  Stock: {ticket.available}
-                </Text>
+                <View style={{ flex: 1, marginLeft: 8 }}>
+                  <Text
+                    style={{
+                      color: theme === 'light' ? '#111' : '#fff',
+                      fontSize: 15,
+                      fontWeight: '600',
+                    }}>
+                    {ticket.type}
+                  </Text>
+
+                  <Text
+                    style={{
+                      color: theme === 'light' ? '#777' : '#bbbbbb',
+                      fontSize: 12,
+                      marginTop: 2,
+                    }}>
+                    Stock: {ticket.available}
+                  </Text>
+                </View>
 
                 <View style={styles.addButtonContainer}>
                   <Pressable style={styles.addButton} onPress={() => decrementar(i)}>
