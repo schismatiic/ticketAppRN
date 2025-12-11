@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import eventApi from "../services/events";
+import { useEffect, useState } from 'react';
+import eventApi from '../services/events';
 const api = eventApi();
 
 // Vale este archivo deberia tener casi todo para que funque, si no lo tiene me avisan
@@ -8,9 +8,9 @@ const api = eventApi();
 // AHora intentare ver que explicar de los hooks
 
 export function useGetbyId() {
-  console.log("[DEBUG]: Ejecutando useGetbyId");
+  console.log('[DEBUG]: Ejecutando useGetbyId');
 
-  const [data, setData] = useState(null);
+  const [edata, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -25,9 +25,9 @@ export function useGetbyId() {
       // Aca llamamos la capa de servicios, todo el resto es mero tratado de funciones asincronas
       const dato = await api.getbyId(id);
       setData(dato);
-      return data;
+      return edata;
     } catch (err) {
-      console.log("[DEBUG]: Error en useGetbyId()");
+      console.log('[DEBUG]: Error en useGetbyId()');
       setError(err);
       throw err;
     } finally {
@@ -35,10 +35,10 @@ export function useGetbyId() {
     }
   }
   //
-  return { get, data, isLoading, error };
+  return { get, edata, isLoading, error };
 }
 export function useDelete() {
-  console.log("[DEBUG]: Ejecutando useDelete");
+  console.log('[DEBUG]: Ejecutando useDelete');
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,7 +52,7 @@ export function useDelete() {
       setData(dato);
       return data;
     } catch (err) {
-      console.log("[DEBUG]: Error en useDelete");
+      console.log('[DEBUG]: Error en useDelete');
       setError(err);
       throw err;
     } finally {
@@ -63,7 +63,7 @@ export function useDelete() {
 }
 
 export function usePost() {
-  console.log("[DEBUG]: Ejecutando usePost");
+  console.log('[DEBUG]: Ejecutando usePost');
 
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export function usePost() {
       setData(dato);
       return data;
     } catch (err) {
-      console.log("[DEBUG]: Error en usePost");
+      console.log('[DEBUG]: Error en usePost');
       setError(err);
       throw err;
     } finally {
@@ -88,26 +88,26 @@ export function usePost() {
 }
 
 export function usePatch() {
-  console.log("[DEBUG]: Ejecutando usePatch");
+  console.log('[DEBUG]: Ejecutando usePatch');
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   async function patch(id, parche) {
-    console.log("[DEBUG]: Iniciando patch");
+    console.log('[DEBUG]: Iniciando patch');
     if (!id || !parche) {
-      console.log("[DEBUG]: No se incluyo id o parche");
+      console.log('[DEBUG]: No se incluyo id o parche');
       return;
     }
     setLoading(true);
     try {
-      console.log("Intentamos llamar patch");
+      console.log('Intentamos llamar patch');
       const dato = await api.patch(id, parche);
       setData(dato);
-      console.log("Parch llamado");
+      console.log('Parch llamado');
       return data;
     } catch (err) {
-      console.log("[DEBUG]: Error en usePartch");
+      console.log('[DEBUG]: Error en usePartch');
       setError(err);
       throw err;
     } finally {
@@ -117,13 +117,13 @@ export function usePatch() {
   return { patch, data, isLoading, error };
 }
 export function useGetEvents() {
-  console.log("[DEBU]: Ejecutando useGetEvents");
+  console.log('[DEBU]: Ejecutando useGetEvents');
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   async function getEvents(params) {
-    console.log("[DEBUG]: Iniciando getEvents");
+    console.log('[DEBUG]: Iniciando getEvents');
     setLoading(true);
     // IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // ESTA FUNCION NO DEBE VERIFICAR SI SE RECIBEN PARAMETROS
@@ -136,7 +136,7 @@ export function useGetEvents() {
       setData(dato);
       return dato;
     } catch (err) {
-      console.log("[DEBUG]: Error en useGetEvents, de useEvents.js");
+      console.log('[DEBUG]: Error en useGetEvents, de useEvents.js');
       setError(err);
       throw err;
     } finally {
