@@ -28,6 +28,6 @@ const getStyles = (theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme === 'light' ? '#fff' : '#000',
+      backgroundColor: theme === 'light' ? '#fff' : '#000000e5',
     },
   });
