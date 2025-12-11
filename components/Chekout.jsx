@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCheckout } from '../src/useHooks/usePurchases.jsx';
 import { useTheme } from '../ThemeContext';
 import useSave from '@/useHooks/useSave.jsx';
@@ -15,7 +15,7 @@ import useSave from '@/useHooks/useSave.jsx';
 export function Checkout({ reservationID, onClose }) {
   const { theme } = useTheme();
   const styles = getStyles(theme);
-
+  const save = useSave();
   const [name, setName] = useState('');
   const [correo, setCorreo] = useState('');
 
@@ -41,7 +41,6 @@ export function Checkout({ reservationID, onClose }) {
       onClose(false);
     }
   }; // Andres qliao dice ayer no si hoy trabajo, no hace nada el larry
-  useSave(data?._id); // si hay un id de compra lo guardamos
   const salir = () => {
     setIsModalVisible(false);
   };
