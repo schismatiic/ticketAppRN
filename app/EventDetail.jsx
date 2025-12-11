@@ -158,7 +158,14 @@ export default function EventDetail() {
                       }}>
                       {ticket.type}
                     </Text>
-
+                    <Text
+                      style={{
+                        color: theme === 'light' ? '#777' : '#bbbbbb',
+                        fontSize: 12,
+                        marginTop: 2,
+                      }}>
+                      Precio: ${ticket.price}
+                    </Text>
                     <Text
                       style={{
                         color: theme === 'light' ? '#777' : '#bbbbbb',
