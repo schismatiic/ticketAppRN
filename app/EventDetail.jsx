@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState, useMemo } from 'react';
 import { usePostReservation } from '../src/useHooks/useReservations';
 import { useTheme } from '../ThemeContext';
-import { Checkout } from 'components/Chekout';
+import { Checkout } from 'components/Checkout';
 import noPicture from '../assets/noPicture.png';
 
 export default function EventDetail() {
@@ -72,6 +72,12 @@ export default function EventDetail() {
     if (cantidad === 0) return theme === 'light' ? '#999' : '#555';
     if (cantidad <= 2) return '#4caf50ff';
     if (cantidad <= 4) return '#ffc107ff';
+    if (cantidad <= 8) return '#5e07ffff';
+    if (cantidad <= 16) return '#5e07ffaf';
+    if (cantidad <= 16) return '#5e07ff85';
+    if (cantidad <= 32) return '#5e07ff81';
+    if (cantidad <= 64) return '#ff0707f1';
+
     return '#ff5252ff';
   };
 
@@ -80,7 +86,10 @@ export default function EventDetail() {
       <ScrollView style={styles.container}>
         <View style={styles.scrollArea}>
           <View style={styles.imageContainer}>
-            <Image source={image === '' || image.includes("placehold") ? noPicture : { uri: image }} style={styles.image} />
+            <Image
+              source={image === '' || image.includes('placehold') ? noPicture : { uri: image }}
+              style={styles.image}
+            />
           </View>
 
           <Text style={styles.title}>{name}</Text>
