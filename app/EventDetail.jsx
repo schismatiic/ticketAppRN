@@ -189,7 +189,8 @@ export default function EventDetail() {
                         borderColor: theme === 'light' ? '#E5E5E5' : '#222222',
                         borderRadius: 4,
                         paddingHorizontal: 10,
-                        paddingVertical: 3,
+                        paddingVertical: 9,
+                        fontSize: 16,
                       }}>
                       {cantidades[i]}
                     </Text>
@@ -325,7 +326,7 @@ const getStyles = (theme) =>
       color: theme === 'light' ? '#ffffffff' : '#000',
       fontWeight: '600',
       textAlign: 'center',
-      fontSize: 18,
+      fontSize: 16,
     },
 
     fixedButton: {
